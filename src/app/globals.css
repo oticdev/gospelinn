@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gim-oxblood: #7A0C1E;
+  --color-gim-oxblood-hover: #9E1B32;
+  --color-gim-oxblood-dark: #4A0813;
+  --color-gim-oxblood-light: #B8253B;
+  --color-gim-skyblue: #0EA5E9;
+  --color-gim-skyblue-hover: #0284C7;
+  --color-gim-skyblue-light: #7DD3FC;
+  --color-gim-skyblue-bright: #38BDF8;
+  --color-gim-dark: #0B1120;
+  --color-gim-card-dark: #162032;
+  --color-gim-gold: #EAB308;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+}
+
+body {
+  background-color: #0b1120;
+  color: #f8fafc;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0b1120;
+}
+::-webkit-scrollbar-thumb {
+  background: #7A0C1E;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9E1B32;
+}
+
+/* Glassmorphism classes */
+.glass-panel {
+  background: rgba(22, 32, 50, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-oxblood {
+  background: rgba(122, 12, 30, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(184, 37, 59, 0.25);
+}
+
+.glass-panel-skyblue {
+  background: rgba(14, 165, 233, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.glow-oxblood {
+  box-shadow: 0 0 35px -5px rgba(122, 12, 30, 0.5);
+}
+
+.glow-skyblue {
+  box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.4);
+}
+
+.text-gradient-oxblood-sky {
+  background: linear-gradient(135deg, #ffffff 0%, #7DD3FC 50%, #38BDF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-heading {
+  background: linear-gradient(135deg, #FFFFFF 30%, #F3C64F 70%, #38BDF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-pattern-grid {
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
