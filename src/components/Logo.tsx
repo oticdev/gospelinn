@@ -2,14 +2,23 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Cross, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 
 interface LogoProps {
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
+  variant?: "gold" | "white";
+  showText?: boolean;
+  showTagline?: boolean;
 }
 
-export default function Logo({ className = "", size = "md" }: LogoProps) {
+export default function Logo({
+  className = "",
+  size = "md",
+  variant = "gold",
+  showText = true,
+  showTagline = true,
+}: LogoProps) {
   const [customLogo, setCustomLogo] = useState<string | null>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,52 +29,92 @@ export default function Logo({ className = "", size = "md" }: LogoProps) {
     }
   };
 
-  const sizeClasses = {
-    sm: "h-8 text-lg",
-    md: "h-11 text-xl",
-    lg: "h-16 text-3xl",
+  const dimensions = {
+    sm: { img: 34, text: "text-base", badge: "text-[10px]", sub: "text-[8px]" },
+    md: { img: 46, text: "text-xl", badge: "text-xs", sub: "text-[10px]" },
+    lg: { img: 60, text: "text-2xl", badge: "text-sm", sub: "text-xs" },
+    xl: { img: 80, text: "text-3xl", badge: "text-base", sub: "text-sm" },
   };
+
+  const selectedDim = dimensions[size] || dimensions.md;
+
+  const logoSrc = customLogo
+    ? customLogo
+    : variant === "white"
+    ? "/images/gospel-inn-logo-white.png"
+    : "/images/gospel-inn-logo-gold.png";
 
   return (
     <div className={`flex items-center gap-3 group cursor-pointer ${className}`}>
-      {customLogo ? (
-        <div className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-[#38BDF8]">
-          <Image src={customLogo} alt="Gospel Inn Ministry Logo" fill className="object-cover" />
-        </div>
-      ) : (
-        <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#7A0C1E] to-[#4A0813] border border-[#38BDF8]/40 shadow-lg group-hover:scale-105 transition-transform duration-300">
-          {/* Flame & Cross Icon */}
-          <div className="absolute inset-0 bg-[#38BDF8]/10 rounded-xl blur-sm"></div>
-          <Cross className="w-5 h-5 text-[#38BDF8] stroke-[2.5]" />
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#7A0C1E] rounded-full border border-white flex items-center justify-center">
-            <span className="w-1.5 h-1.5 bg-[#38BDF8] rounded-full animate-ping"></span>
+      {/* 3D Seal Logo Image Emblem */}
+      <div
+        className={`relative shrink-0 rounded-full transition-all duration-300 group-hover:scale-105 ${
+          variant === "gold"
+            ? "border border-[#EAB308]/50 shadow-[0_0_20px_rgba(234,179,8,0.25)] bg-[#1A1608]"
+            : "border border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.2)] bg-slate-900"
+        }`}
+        style={{ width: selectedDim.img, height: selectedDim.img }}
+      >
+        <Image
+          src={logoSrc}
+          alt="Gospel Inn Ministry Official Logo"
+          width={selectedDim.img}
+          height={selectedDim.img}
+          className="rounded-full object-cover p-0.5"
+          priority
+        />
+        {/* Glow ambient overlay */}
+        <div
+          className={`absolute inset-0 rounded-full blur-md opacity-30 group-hover:opacity-60 transition-opacity ${
+            variant === "gold" ? "bg-[#EAB308]" : "bg-[#38BDF8]"
+          }`}
+        ></div>
+      </div>
+
+      {/* Typography */}
+      {showText && (
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2">
+            <span
+              className={`font-black tracking-wider uppercase font-serif ${
+                variant === "gold"
+                  ? "bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-sm"
+                  : "text-white"
+              } ${selectedDim.text}`}
+            >
+              GOSPEL INN
+            </span>
+            <span
+              className={`font-bold px-2 py-0.5 rounded-full border shadow-sm ${selectedDim.badge} ${
+                variant === "gold"
+                  ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
+                  : "bg-[#38BDF8]/10 text-[#38BDF8] border-[#38BDF8]/30"
+              }`}
+            >
+              MINISTRY
+            </span>
           </div>
+          {showTagline && (
+            <span
+              className={`font-semibold tracking-widest uppercase -mt-0.5 ${selectedDim.sub} ${
+                variant === "gold" ? "text-amber-200/70" : "text-slate-400"
+              }`}
+            >
+              REVIVAL AMONG NATIONS
+            </span>
+          )}
         </div>
       )}
 
-      <div className="flex flex-col">
-        <div className="flex items-center gap-1.5">
-          <span className={`font-black tracking-wider uppercase font-serif text-white ${sizeClasses[size]}`}>
-            GOSPEL INN
-          </span>
-          <span className="text-[#38BDF8] font-bold text-xs px-2 py-0.5 rounded-full bg-[#38BDF8]/10 border border-[#38BDF8]/30">
-            MINISTRY
-          </span>
-        </div>
-        <span className="text-[10px] text-slate-400 font-medium tracking-widest uppercase -mt-1">
-          SANCTUARY OF GRACE & TRUTH
-        </span>
-      </div>
-
-      {/* Hidden upload option for user PNG logo */}
+      {/* Quick custom upload trigger */}
       <label
-        htmlFor="logo-upload"
-        className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 text-xs text-slate-400 hover:text-[#38BDF8] cursor-pointer"
-        title="Upload Custom PNG Logo"
+        htmlFor="logo-upload-input"
+        className="opacity-0 group-hover:opacity-60 hover:!opacity-100 transition-opacity p-1 text-slate-400 hover:text-amber-400 cursor-pointer"
+        title="Upload Custom Logo PNG/JPG"
       >
         <Upload className="w-3.5 h-3.5" />
         <input
-          id="logo-upload"
+          id="logo-upload-input"
           type="file"
           accept="image/png,image/jpeg"
           className="hidden"
@@ -75,3 +124,4 @@ export default function Logo({ className = "", size = "md" }: LogoProps) {
     </div>
   );
 }
+
