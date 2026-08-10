@@ -16,12 +16,12 @@ export default function Footer() {
   return (
     <footer id="contact" className="bg-[#0B1120] border-t border-white/10 pt-16 pb-12 relative overflow-hidden text-left">
       {/* Background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#7A0C1E]/15 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#6E0A1A]/15 rounded-full blur-[140px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Top Section: Newsletter Card */}
-        <div className="glass-panel-oxblood p-8 rounded-3xl border border-[#7A0C1E] mb-16 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="glass-panel-oxblood p-8 rounded-3xl border border-[#6E0A1A] mb-16 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <h3 className="text-xl font-bold text-white flex items-center gap-2 justify-center md:justify-start">
               <Sparkles className="w-5 h-5 text-[#38BDF8]" />
@@ -47,7 +47,7 @@ export default function Footer() {
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] border border-[#38BDF8]/30 shadow-md shrink-0 flex items-center gap-1.5"
+                  className="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/30 shadow-md shrink-0 flex items-center gap-1.5"
                 >
                   <Send className="w-3.5 h-3.5" />
                   Join
@@ -104,10 +104,6 @@ export default function Footer() {
                 <span>Night of Encounter Vigil</span>
                 <span className="font-semibold text-white">3rd Fri 9:00 PM</span>
               </li>
-              <li className="flex justify-between py-1 border-b border-white/5">
-                <span>STRASODA & Vine Drama</span>
-                <span className="font-semibold text-[#38BDF8]">Sun 4:00 PM</span>
-              </li>
             </ul>
           </div>
 
@@ -133,7 +129,7 @@ export default function Footer() {
             </h4>
             <div className="space-y-2.5 text-xs text-slate-300">
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#7A0C1E] shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#6E0A1A] shrink-0 mt-0.5" />
                 <span>Gospel Inn Ministry Cathedral, Main Sanctuary</span>
               </div>
               <div className="flex items-center gap-2.5">

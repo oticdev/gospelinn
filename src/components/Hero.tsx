@@ -2,14 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Play, Calendar, ShieldCheck, Flame, ChevronRight, Clock, MapPin, Users } from "lucide-react";
+import { Play, Calendar, ShieldCheck, Flame, Clock } from "lucide-react";
 
-interface HeroProps {
-  onOpenGiving: () => void;
-  onOpenPrayer: () => void;
-}
-
-export default function Hero({ onOpenGiving, onOpenPrayer }: HeroProps) {
+export default function Hero() {
   // Live service countdown calculation
   const [timeLeft, setTimeLeft] = useState({ hours: 14, minutes: 35, seconds: 20 });
 
@@ -28,7 +23,7 @@ export default function Hero({ onOpenGiving, onOpenPrayer }: HeroProps) {
   return (
     <section id="hero" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-[#0B1120]">
       {/* Dynamic Background Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#7A0C1E]/20 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#6E0A1A]/20 rounded-full blur-[140px] pointer-events-none"></div>
       <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-[#0EA5E9]/15 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute inset-0 bg-pattern-grid opacity-40 pointer-events-none"></div>
 
@@ -56,14 +51,14 @@ export default function Hero({ onOpenGiving, onOpenPrayer }: HeroProps) {
 
             {/* Subheading */}
             <p className="text-base sm:text-lg text-slate-300 max-w-2xl font-light leading-relaxed mx-auto lg:mx-0">
-              Welcome to <span className="text-white font-semibold">Gospel Inn Ministry</span>. We are dedicated to raising disciples, building spiritual intimacy, and experiencing the raw presence of God through fervent prayer and biblical truth.
+              Welcome to <span className="text-white font-semibold">Gospel Inn Ministry</span>. We are dedicated to raising disciples, building spiritual intimacy, and experiencing the deep realities of the presence of God through fervent prayer and biblical truth.
             </p>
 
             {/* Primary Action Buttons */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
               <a
                 href="#schedule"
-                className="px-7 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#7A0C1E] via-[#9E1B32] to-[#7A0C1E] border border-[#38BDF8]/40 shadow-xl shadow-[#7A0C1E]/40 hover:shadow-[#38BDF8]/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 text-sm"
+                className="px-7 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#6E0A1A] via-[#9E1B32] to-[#6E0A1A] border border-[#38BDF8]/40 shadow-xl shadow-[#6E0A1A]/40 hover:shadow-[#38BDF8]/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 text-sm"
               >
                 <Calendar className="w-4 h-4 text-[#38BDF8]" />
                 Join Our Next Service
@@ -82,7 +77,7 @@ export default function Hero({ onOpenGiving, onOpenPrayer }: HeroProps) {
             <div className="pt-4">
               <div className="glass-panel p-4 rounded-2xl border border-white/10 max-w-lg mx-auto lg:mx-0 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-3 text-left">
-                  <div className="p-2.5 rounded-xl bg-[#7A0C1E]/40 border border-[#7A0C1E] text-[#38BDF8]">
+                  <div className="p-2.5 rounded-xl bg-[#6E0A1A]/40 border border-[#6E0A1A] text-[#38BDF8]">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
@@ -114,7 +109,7 @@ export default function Hero({ onOpenGiving, onOpenPrayer }: HeroProps) {
             {/* Quick Metrics */}
             <div className="grid grid-cols-3 gap-4 pt-4 max-w-lg mx-auto lg:mx-0 border-t border-white/10">
               <div>
-                <div className="text-xl sm:text-2xl font-black text-white">5 Weekly</div>
+                <div className="text-xl sm:text-2xl font-black text-white">4 Weekly</div>
                 <div className="text-xs text-slate-400">Services & Classes</div>
               </div>
               <div>
@@ -133,7 +128,7 @@ export default function Hero({ onOpenGiving, onOpenPrayer }: HeroProps) {
           <div className="lg:col-span-5 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none">
               {/* Outer decorative card frame */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-[#7A0C1E] via-[#38BDF8] to-[#7A0C1E] opacity-50 blur-lg"></div>
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-[#6E0A1A] via-[#38BDF8] to-[#6E0A1A] opacity-50 blur-lg"></div>
 
               <div className="relative rounded-3xl overflow-hidden glass-panel border border-white/15 shadow-2xl">
                 <div className="relative h-[420px] w-full">
@@ -147,7 +142,7 @@ export default function Hero({ onOpenGiving, onOpenPrayer }: HeroProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/40 to-transparent"></div>
 
                   {/* Floating Overlay Badge 1 */}
-                  <div className="absolute top-4 left-4 glass-panel-oxblood px-3 py-2 rounded-xl flex items-center gap-2 border border-[#7A0C1E]">
+                  <div className="absolute top-4 left-4 glass-panel-oxblood px-3 py-2 rounded-xl flex items-center gap-2 border border-[#6E0A1A]">
                     <ShieldCheck className="w-4 h-4 text-[#38BDF8]" />
                     <span className="text-xs font-semibold text-white">Pastor Ameh Amana</span>
                   </div>
@@ -156,12 +151,12 @@ export default function Hero({ onOpenGiving, onOpenPrayer }: HeroProps) {
                   <div className="absolute bottom-6 left-6 right-6 glass-panel p-4 rounded-2xl border border-white/10 text-left">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
-                        STRASODA Renewal & Vine Drama
+                        Encounter Service
                       </span>
-                      <span className="text-[10px] text-slate-400">Sundays 4:00 PM</span>
+                      <span className="text-[10px] text-slate-400">Thursdays 4:00 PM</span>
                     </div>
                     <p className="text-xs text-slate-200 line-clamp-2">
-                      Experience powerful theatrical drama presentations and deep prophetic renewal every Sunday afternoon.
+                      Experience explosive praise, prophetic ministry, healing, and word revelation every Thursday afternoon.
                     </p>
                   </div>
                 </div>

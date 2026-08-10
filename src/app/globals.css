@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gim-oxblood: #7A0C1E;
+  --color-gim-oxblood: #6E0A1A;
   --color-gim-oxblood-hover: #9E1B32;
   --color-gim-oxblood-dark: #4A0813;
   --color-gim-oxblood-light: #B8253B;
@@ -35,7 +35,7 @@ body {
   background: #0b1120;
 }
 ::-webkit-scrollbar-thumb {
-  background: #7A0C1E;
+  background: #6E0A1A;
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -51,7 +51,7 @@ body {
 }
 
 .glass-panel-oxblood {
-  background: rgba(122, 12, 30, 0.4);
+  background: rgba(110, 10, 26, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(184, 37, 59, 0.25);
@@ -65,7 +65,7 @@ body {
 }
 
 .glow-oxblood {
-  box-shadow: 0 0 35px -5px rgba(122, 12, 30, 0.5);
+  box-shadow: 0 0 35px -5px rgba(110, 10, 26, 0.5);
 }
 
 .glow-skyblue {

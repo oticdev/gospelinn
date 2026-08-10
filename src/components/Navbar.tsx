@@ -2,14 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import Logo from "./Logo";
-import { Menu, X, Heart, Calendar, Radio, Sparkles } from "lucide-react";
+import { Menu, X, Heart } from "lucide-react";
 
 interface NavbarProps {
   onOpenGiving: () => void;
-  onOpenPrayer: () => void;
 }
 
-export default function Navbar({ onOpenGiving, onOpenPrayer }: NavbarProps) {
+export default function Navbar({ onOpenGiving }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -26,7 +25,7 @@ export default function Navbar({ onOpenGiving, onOpenPrayer }: NavbarProps) {
     { name: "Pastor Ameh Amana", href: "#pastor" },
     { name: "Weekly Meetings", href: "#schedule" },
     { name: "Conferences", href: "#conferences" },
-    { name: "Vine Drama", href: "#drama" },
+    { name: "Encounter Service", href: "#encounter" },
     { name: "Sermons & Media", href: "#sermons" },
   ];
 
@@ -53,38 +52,17 @@ export default function Navbar({ onOpenGiving, onOpenPrayer }: NavbarProps) {
               className="text-sm font-medium text-slate-300 hover:text-[#38BDF8] transition-colors relative py-1 group"
             >
               {link.name}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#7A0C1E] to-[#38BDF8] group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#6E0A1A] to-[#38BDF8] group-hover:w-full transition-all duration-300"></span>
             </a>
           ))}
         </nav>
 
         {/* Action Buttons */}
         <div className="hidden md:flex items-center space-x-3">
-          {/* Live Badge */}
-          <a
-            href="#schedule"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#7A0C1E]/30 border border-[#7A0C1E] text-xs font-semibold text-white hover:bg-[#7A0C1E]/50 transition-all"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#38BDF8] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#38BDF8]"></span>
-            </span>
-            <span className="text-slate-200">Weekly Services</span>
-          </a>
-
-          {/* Prayer Request Button */}
-          <button
-            onClick={onOpenPrayer}
-            className="px-4 py-2 text-xs font-semibold text-slate-200 hover:text-white rounded-lg border border-white/15 hover:border-[#38BDF8]/50 bg-white/5 hover:bg-white/10 transition-all flex items-center gap-1.5"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-[#38BDF8]" />
-            Prayer Request
-          </button>
-
           {/* Give Button */}
           <button
             onClick={onOpenGiving}
-            className="px-4 py-2 text-xs font-bold text-white rounded-lg bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] hover:from-[#9E1B32] hover:to-[#7A0C1E] border border-[#38BDF8]/30 shadow-lg shadow-[#7A0C1E]/30 hover:shadow-[#38BDF8]/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-1.5"
+            className="px-4 py-2 text-xs font-bold text-white rounded-lg bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] hover:from-[#9E1B32] hover:to-[#6E0A1A] border border-[#38BDF8]/30 shadow-lg shadow-[#6E0A1A]/30 hover:shadow-[#38BDF8]/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-1.5"
           >
             <Heart className="w-3.5 h-3.5 fill-white/20 text-white" />
             Give / Tithe
@@ -117,18 +95,9 @@ export default function Navbar({ onOpenGiving, onOpenPrayer }: NavbarProps) {
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onOpenPrayer();
-              }}
-              className="w-full py-2.5 text-center text-sm font-semibold text-slate-200 bg-white/5 rounded-lg border border-white/10"
-            >
-              Submit Prayer Request
-            </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
                 onOpenGiving();
               }}
-              className="w-full py-2.5 text-center text-sm font-bold text-white bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] rounded-lg shadow-md"
+              className="w-full py-2.5 text-center text-sm font-bold text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] rounded-lg shadow-md"
             >
               Give Online / Tithes
             </button>

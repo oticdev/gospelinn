@@ -88,14 +88,14 @@ export default function SermonsHub() {
   return (
     <section id="sermons" className="py-24 bg-[#0F172A] relative overflow-hidden">
       {/* Glows */}
-      <div className="absolute top-0 right-10 w-96 h-96 bg-[#7A0C1E]/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-0 right-10 w-96 h-96 bg-[#6E0A1A]/20 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#7A0C1E]/30 border border-[#7A0C1E] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#6E0A1A]/30 border border-[#6E0A1A] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
             <Mic className="w-3.5 h-3.5" />
             Word & Messages Archive
           </div>
@@ -130,7 +130,7 @@ export default function SermonsHub() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   activeCategory === cat
-                    ? "bg-[#7A0C1E] text-white border border-[#38BDF8]/40"
+                    ? "bg-[#6E0A1A] text-white border border-[#38BDF8]/40"
                     : "bg-white/5 text-slate-300 hover:text-white hover:bg-white/10"
                 }`}
               >
@@ -149,12 +149,12 @@ export default function SermonsHub() {
               className="group relative rounded-3xl overflow-hidden glass-panel border border-white/10 hover:border-[#38BDF8]/50 transition-all duration-300 flex flex-col justify-between"
             >
               {/* Media Thumbnail Placeholder */}
-              <div className="relative h-48 w-full bg-gradient-to-br from-[#7A0C1E]/60 to-[#0B1120] flex items-center justify-center p-6 text-center">
+              <div className="relative h-48 w-full bg-gradient-to-br from-[#6E0A1A]/60 to-[#0B1120] flex items-center justify-center p-6 text-center">
                 <div className="absolute inset-0 bg-pattern-grid opacity-30"></div>
                 
                 <button
                   onClick={() => setActiveMediaModal(sermon)}
-                  className="w-14 h-14 rounded-full bg-[#7A0C1E] border-2 border-[#38BDF8] flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform relative z-10"
+                  className="w-14 h-14 rounded-full bg-[#6E0A1A] border-2 border-[#38BDF8] flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform relative z-10"
                 >
                   <Play className="w-6 h-6 fill-white ml-1 text-white" />
                 </button>
@@ -166,7 +166,7 @@ export default function SermonsHub() {
                 </div>
 
                 {/* Category Pill */}
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#7A0C1E]/80 text-[10px] font-bold text-[#38BDF8] border border-[#7A0C1E]">
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#6E0A1A]/80 text-[10px] font-bold text-[#38BDF8] border border-[#6E0A1A]">
                   {sermon.category}
                 </div>
               </div>
@@ -244,7 +244,7 @@ export default function SermonsHub() {
                 </p>
                 <button
                   onClick={() => alert("Redirecting to Gospel Inn Youtube Channel Stream...")}
-                  className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#7A0C1E] border border-[#38BDF8]/40"
+                  className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#6E0A1A] border border-[#38BDF8]/40"
                 >
                   Open Live Channel
                 </button>

@@ -1,8 +1,4 @@
-"use client";
-
-import React, { useState } from "react";
 import Image from "next/image";
-import { Upload } from "lucide-react";
 
 interface LogoProps {
   className?: string;
@@ -15,20 +11,10 @@ interface LogoProps {
 export default function Logo({
   className = "",
   size = "md",
-  variant = "gold",
+  variant = "white",
   showText = true,
   showTagline = true,
 }: LogoProps) {
-  const [customLogo, setCustomLogo] = useState<string | null>(null);
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setCustomLogo(url);
-    }
-  };
-
   const dimensions = {
     sm: { img: 34, text: "text-base", badge: "text-[10px]", sub: "text-[8px]" },
     md: { img: 46, text: "text-xl", badge: "text-xs", sub: "text-[10px]" },
@@ -38,14 +24,13 @@ export default function Logo({
 
   const selectedDim = dimensions[size] || dimensions.md;
 
-  const logoSrc = customLogo
-    ? customLogo
-    : variant === "white"
-    ? "/images/gospel-inn-logo-white.png"
-    : "/images/gospel-inn-logo-gold.png";
+  const logoSrc =
+    variant === "white"
+      ? "/images/gospel-inn-logo-white.png"
+      : "/images/gospel-inn-logo-gold.png";
 
   return (
-    <div className={`flex items-center gap-3 group cursor-pointer ${className}`}>
+    <div className={`flex items-center gap-3 group ${className}`}>
       {/* 3D Seal Logo Image Emblem */}
       <div
         className={`relative shrink-0 rounded-full transition-all duration-300 group-hover:scale-105 ${
@@ -105,23 +90,6 @@ export default function Logo({
           )}
         </div>
       )}
-
-      {/* Quick custom upload trigger */}
-      <label
-        htmlFor="logo-upload-input"
-        className="opacity-0 group-hover:opacity-60 hover:!opacity-100 transition-opacity p-1 text-slate-400 hover:text-amber-400 cursor-pointer"
-        title="Upload Custom Logo PNG/JPG"
-      >
-        <Upload className="w-3.5 h-3.5" />
-        <input
-          id="logo-upload-input"
-          type="file"
-          accept="image/png,image/jpeg"
-          className="hidden"
-          onChange={handleFileUpload}
-        />
-      </label>
     </div>
   );
 }
-

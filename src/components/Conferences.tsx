@@ -111,14 +111,14 @@ export default function Conferences() {
   return (
     <section id="conferences" className="py-24 bg-[#0F172A] relative overflow-hidden">
       {/* Background Orbs */}
-      <div className="absolute top-1/3 left-0 w-96 h-96 bg-[#7A0C1E]/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/3 left-0 w-96 h-96 bg-[#6E0A1A]/20 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#7A0C1E]/30 border border-[#7A0C1E] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#6E0A1A]/30 border border-[#6E0A1A] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
             Kingdom Impact Conventions
           </div>
@@ -145,7 +145,7 @@ export default function Conferences() {
                 {/* Top Badge & Icon */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-[#7A0C1E]/40 text-[#38BDF8] border border-[#7A0C1E]">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-[#6E0A1A]/40 text-[#38BDF8] border border-[#6E0A1A]">
                       {conf.season}
                     </span>
                     <div className="p-3 rounded-2xl bg-white/5 border border-white/10 text-[#38BDF8] group-hover:scale-110 transition-transform">
@@ -165,7 +165,7 @@ export default function Conferences() {
 
                   {/* Target Audience */}
                   <div className="flex items-center gap-2 text-xs text-slate-400 font-medium pt-1">
-                    <Users className="w-3.5 h-3.5 text-[#7A0C1E]" />
+                    <Users className="w-3.5 h-3.5 text-[#6E0A1A]" />
                     <span>{conf.demographic}</span>
                   </div>
 
@@ -180,7 +180,7 @@ export default function Conferences() {
                   <span className="text-xs text-slate-400">Gospel Inn Ministry</span>
                   <button
                     onClick={() => setSelectedConference(conf)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] hover:from-[#9E1B32] hover:to-[#7A0C1E] border border-[#38BDF8]/30 flex items-center gap-1 transition-all"
+                    className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] hover:from-[#9E1B32] hover:to-[#6E0A1A] border border-[#38BDF8]/30 flex items-center gap-1 transition-all"
                   >
                     <span>Register / Info</span>
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -266,7 +266,7 @@ export default function Conferences() {
 
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] border border-[#38BDF8]/40 shadow-lg hover:shadow-[#38BDF8]/20 transition-all mt-2"
+                    className="w-full py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/40 shadow-lg hover:shadow-[#38BDF8]/20 transition-all mt-2"
                   >
                     Confirm Registration
                   </button>

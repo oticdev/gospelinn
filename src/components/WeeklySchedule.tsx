@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Calendar, Clock, MapPin, Bell, Sparkles, Flame, CheckCircle2, ChevronRight, Moon, Shield, Theater } from "lucide-react";
+import { Calendar, Clock, MapPin, Bell, Sparkles, Flame, CheckCircle2, Moon, Shield } from "lucide-react";
 
 interface ServiceEvent {
   id: string;
@@ -9,7 +9,6 @@ interface ServiceEvent {
   day: string;
   time: string;
   frequency: "Weekly" | "Monthly";
-  category: "Prayer" | "Discipleship" | "Worship" | "Vigil" | "Drama";
   icon: any;
   description: string;
   badge?: string;
@@ -27,7 +26,6 @@ export default function WeeklySchedule() {
       day: "Every Monday",
       time: "4:00 PM",
       frequency: "Weekly",
-      category: "Prayer",
       icon: Flame,
       description: "A consecrated atmosphere dedicated to intercession, spiritual warfare instruction, and building personal prayer endurance.",
       badge: "Spiritual Growth",
@@ -39,7 +37,6 @@ export default function WeeklySchedule() {
       day: "Every Tuesday",
       time: "4:00 PM",
       frequency: "Weekly",
-      category: "Discipleship",
       icon: Shield,
       description: "In-depth exposition of biblical doctrines, Christian character formation, and personal spiritual growth under pastoral guidance.",
       badge: "Foundational Doctrine",
@@ -51,7 +48,6 @@ export default function WeeklySchedule() {
       day: "Every Thursday",
       time: "4:00 PM",
       frequency: "Weekly",
-      category: "Worship",
       icon: Sparkles,
       description: "Mid-week divine visitation featuring explosive praise, prophetic ministry, healing, and word revelation.",
       badge: "Prophetic & Power",
@@ -63,23 +59,10 @@ export default function WeeklySchedule() {
       day: "3rd Friday of Every Month",
       time: "9:00 PM",
       frequency: "Monthly",
-      category: "Vigil",
       icon: Moon,
       description: "All-night prayer vigil reserved for intense spiritual breakthroughs, deliverance, prophetic ministration, and divine encounters.",
       badge: "Monthly All-Night Vigil",
       color: "oxblood",
-    },
-    {
-      id: "strasoda-renewal",
-      name: "STRASODA Renewal Service & Vine Drama Ministry",
-      day: "Every Sunday",
-      time: "4:00 PM",
-      frequency: "Weekly",
-      category: "Drama",
-      icon: Theater,
-      description: "Atmospheric Sunday gathering combining powerful Word ministration, renewal worship, and dramatic gospel plays by Vine Drama Ministry.",
-      badge: "Sunday Flagship Service",
-      color: "skyblue",
     },
   ];
 
@@ -92,14 +75,13 @@ export default function WeeklySchedule() {
     if (activeFilter === "All") return true;
     if (activeFilter === "Weekly") return s.frequency === "Weekly";
     if (activeFilter === "Monthly") return s.frequency === "Monthly";
-    if (activeFilter === "Drama & Renewal") return s.category === "Drama";
     return true;
   });
 
   return (
     <section id="schedule" className="py-24 bg-[#0B1120] relative overflow-hidden">
       {/* Background Gradients */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#7A0C1E]/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#6E0A1A]/15 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#0EA5E9]/15 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute inset-0 bg-pattern-grid opacity-30 pointer-events-none"></div>
 
@@ -107,7 +89,7 @@ export default function WeeklySchedule() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#7A0C1E]/30 border border-[#7A0C1E] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#6E0A1A]/30 border border-[#6E0A1A] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
             <Calendar className="w-3.5 h-3.5" />
             Weekly & Monthly Gatherings
           </div>
@@ -129,13 +111,13 @@ export default function WeeklySchedule() {
 
         {/* Filter Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-          {["All", "Weekly", "Monthly", "Drama & Renewal"].map((filter) => (
+          {["All", "Weekly", "Monthly"].map((filter) => (
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
               className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
                 activeFilter === filter
-                  ? "bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] text-white border border-[#38BDF8]/40 shadow-lg shadow-[#7A0C1E]/30"
+                  ? "bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] text-white border border-[#38BDF8]/40 shadow-lg shadow-[#6E0A1A]/30"
                   : "bg-white/5 text-slate-300 hover:text-white border border-white/10 hover:bg-white/10"
               }`}
             >
@@ -158,7 +140,7 @@ export default function WeeklySchedule() {
                 {/* Top Accent Line */}
                 <div
                   className={`h-1.5 w-full ${
-                    isOxblood ? "bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32]" : "bg-gradient-to-r from-[#0EA5E9] to-[#38BDF8]"
+                    isOxblood ? "bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32]" : "bg-gradient-to-r from-[#0EA5E9] to-[#38BDF8]"
                   }`}
                 ></div>
 
@@ -168,7 +150,7 @@ export default function WeeklySchedule() {
                     <span
                       className={`text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border ${
                         isOxblood
-                          ? "bg-[#7A0C1E]/30 text-[#38BDF8] border-[#7A0C1E]"
+                          ? "bg-[#6E0A1A]/30 text-[#38BDF8] border-[#6E0A1A]"
                           : "bg-[#0EA5E9]/20 text-[#7DD3FC] border-[#0EA5E9]/40"
                       }`}
                     >
@@ -205,7 +187,7 @@ export default function WeeklySchedule() {
                 {/* Footer Action */}
                 <div className="p-4 px-6 border-t border-white/10 bg-black/20 flex items-center justify-between">
                   <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                    <MapPin className="w-3.5 h-3.5 text-[#7A0C1E]" />
+                    <MapPin className="w-3.5 h-3.5 text-[#6E0A1A]" />
                     <span>Main Sanctuary</span>
                   </div>
 
@@ -232,7 +214,7 @@ export default function WeeklySchedule() {
           </div>
           <a
             href="#contact"
-            className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] border border-[#38BDF8]/30 shadow-md shrink-0"
+            className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/30 shadow-md shrink-0"
           >
             Plan Your Visit
           </a>

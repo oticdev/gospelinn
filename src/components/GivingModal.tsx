@@ -56,7 +56,7 @@ export default function GivingModal({ isOpen, onClose }: GivingModalProps) {
 
         {givenSuccess ? (
           <div className="text-center py-10 space-y-3">
-            <div className="w-16 h-16 rounded-full bg-[#7A0C1E]/50 border-2 border-[#38BDF8] flex items-center justify-center mx-auto text-[#38BDF8]">
+            <div className="w-16 h-16 rounded-full bg-[#6E0A1A]/50 border-2 border-[#38BDF8] flex items-center justify-center mx-auto text-[#38BDF8]">
               <Heart className="w-8 h-8 fill-[#38BDF8]" />
             </div>
             <h3 className="text-2xl font-bold text-white">May God Bless Your Giving!</h3>
@@ -68,7 +68,7 @@ export default function GivingModal({ isOpen, onClose }: GivingModalProps) {
           <>
             {/* Header */}
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#7A0C1E]/40 border border-[#7A0C1E] text-[11px] font-bold text-[#38BDF8]">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#6E0A1A]/40 border border-[#6E0A1A] text-[11px] font-bold text-[#38BDF8]">
                 <Heart className="w-3.5 h-3.5 fill-[#38BDF8]" />
                 Online Giving & Partnership
               </div>
@@ -85,7 +85,7 @@ export default function GivingModal({ isOpen, onClose }: GivingModalProps) {
                 {[
                   "Tithe & Offering",
                   "Building Fund",
-                  "Vine Drama Seed",
+                  "Encounter Seed",
                   "Conference Sponsor",
                   "Children Outreach",
                   "Pastor Seed",
@@ -96,7 +96,7 @@ export default function GivingModal({ isOpen, onClose }: GivingModalProps) {
                     onClick={() => setSelectedFund(fund)}
                     className={`py-2 px-3 rounded-xl text-xs font-semibold transition-all border ${
                       selectedFund === fund
-                        ? "bg-[#7A0C1E] text-white border-[#38BDF8]/50 shadow-md"
+                        ? "bg-[#6E0A1A] text-white border-[#38BDF8]/50 shadow-md"
                         : "bg-white/5 text-slate-300 border-white/10 hover:bg-white/10"
                     }`}
                   >
@@ -107,7 +107,7 @@ export default function GivingModal({ isOpen, onClose }: GivingModalProps) {
             </div>
 
             {/* Bank Transfer Details Box */}
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-[#7A0C1E]/40 to-[#0B1120] border border-[#7A0C1E] space-y-3">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-[#6E0A1A]/40 to-[#0B1120] border border-[#6E0A1A] space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#38BDF8] uppercase tracking-wider flex items-center gap-1.5">
                   <Landmark className="w-4 h-4" />
@@ -164,7 +164,7 @@ export default function GivingModal({ isOpen, onClose }: GivingModalProps) {
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] border border-[#38BDF8]/40 shadow-lg hover:shadow-[#38BDF8]/20 transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/40 shadow-lg hover:shadow-[#38BDF8]/20 transition-all flex items-center justify-center gap-2"
               >
                 <CreditCard className="w-4 h-4" />
                 I Have Sent My Seed / Tithe

@@ -6,29 +6,21 @@ import Hero from "@/components/Hero";
 import PastorSpotlight from "@/components/PastorSpotlight";
 import WeeklySchedule from "@/components/WeeklySchedule";
 import Conferences from "@/components/Conferences";
-import DramaMinistry from "@/components/DramaMinistry";
+import EncounterService from "@/components/EncounterService";
 import SermonsHub from "@/components/SermonsHub";
 import GivingModal from "@/components/GivingModal";
-import PrayerRequest from "@/components/PrayerRequest";
 import Footer from "@/components/Footer";
 
 export default function Home() {
   const [givingModalOpen, setGivingModalOpen] = useState(false);
-  const [prayerModalOpen, setPrayerModalOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#7A0C1E] selection:text-white relative">
+    <main className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#6E0A1A] selection:text-white relative">
       {/* Navigation Header */}
-      <Navbar
-        onOpenGiving={() => setGivingModalOpen(true)}
-        onOpenPrayer={() => setPrayerModalOpen(true)}
-      />
+      <Navbar onOpenGiving={() => setGivingModalOpen(true)} />
 
       {/* Hero Section */}
-      <Hero
-        onOpenGiving={() => setGivingModalOpen(true)}
-        onOpenPrayer={() => setPrayerModalOpen(true)}
-      />
+      <Hero />
 
       {/* Lead Pastor Spotlight Section */}
       <PastorSpotlight />
@@ -39,8 +31,8 @@ export default function Home() {
       {/* Conferences Section */}
       <Conferences />
 
-      {/* Vine Drama Ministry Feature */}
-      <DramaMinistry />
+      {/* Thursday Encounter Service Feature */}
+      <EncounterService />
 
       {/* Sermons & Media Archive */}
       <SermonsHub />
@@ -49,11 +41,6 @@ export default function Home() {
       <GivingModal
         isOpen={givingModalOpen}
         onClose={() => setGivingModalOpen(false)}
-      />
-
-      <PrayerRequest
-        isOpen={prayerModalOpen}
-        onClose={() => setPrayerModalOpen(false)}
       />
 
       {/* Footer */}

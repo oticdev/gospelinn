@@ -2,13 +2,13 @@
 
 import React from "react";
 import Image from "next/image";
-import { Theater, Sparkles, Film, Music, Shield, Play } from "lucide-react";
+import { Sparkles, Flame, Music, Calendar } from "lucide-react";
 
-export default function DramaMinistry() {
+export default function EncounterService() {
   return (
-    <section id="drama" className="py-24 bg-[#0B1120] relative overflow-hidden">
+    <section id="encounter" className="py-24 bg-[#0B1120] relative overflow-hidden">
       {/* Glows */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[#7A0C1E]/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[#6E0A1A]/25 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#0EA5E9]/15 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -18,31 +18,31 @@ export default function DramaMinistry() {
           {/* Left Column: Information & Features */}
           <div className="lg:col-span-6 space-y-6">
             
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#7A0C1E]/30 border border-[#7A0C1E] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
-              <Theater className="w-3.5 h-3.5" />
-              Every Sunday @ 4:00 PM
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#6E0A1A]/30 border border-[#6E0A1A] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
+              <Calendar className="w-3.5 h-3.5" />
+              Every Thursday @ 4:00 PM
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-              STRASODA Renewal & <br />
+              The Flagship <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#7DD3FC] to-[#38BDF8]">
-                Vine Drama Ministry
+                Thursday Encounter Service
               </span>
             </h2>
 
             <p className="text-slate-300 text-base font-light leading-relaxed">
-              Experience the gospel brought alive through anointed stage plays, theatrical storytelling, intense worship, and prophetic spiritual renewal every Sunday afternoon.
+              Experience explosive praise, prophetic ministry, healing, and word revelation at our main weekly service dedicated to divine visitation and life transformation.
             </p>
 
             <div className="space-y-4 pt-2">
               <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-[#38BDF8]/40 transition-colors">
-                <div className="p-3 rounded-xl bg-[#7A0C1E]/40 border border-[#7A0C1E] text-[#38BDF8] shrink-0">
-                  <Film className="w-5 h-5" />
+                <div className="p-3 rounded-xl bg-[#6E0A1A]/40 border border-[#6E0A1A] text-[#38BDF8] shrink-0">
+                  <Flame className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white mb-0.5">Prophetic Drama & Stage Presentations</h3>
+                  <h3 className="text-sm font-bold text-white mb-0.5">Explosive Praise & Worship</h3>
                   <p className="text-xs text-slate-300 font-light">
-                    Compelling gospel dramas produced by Vine Drama Ministry designed to convict, heal, and transform lives.
+                    Atmospheric worship ushering the raw presence of God through fervent praise, celebration, and deep adoration.
                   </p>
                 </div>
               </div>
@@ -52,9 +52,9 @@ export default function DramaMinistry() {
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white mb-0.5">STRASODA Spiritual Renewal</h3>
+                  <h3 className="text-sm font-bold text-white mb-0.5">Prophetic Ministry & Healing</h3>
                   <p className="text-xs text-slate-300 font-light">
-                    Weekly renewal service refreshing believers after the week through deep worship, intercession, and divine word.
+                    Divine visitation featuring prophetic ministration, healing, and revelatory word that renews the spirit.
                   </p>
                 </div>
               </div>
@@ -63,34 +63,34 @@ export default function DramaMinistry() {
             <div className="flex items-center gap-4 pt-4">
               <a
                 href="#schedule"
-                className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#7A0C1E] to-[#9E1B32] border border-[#38BDF8]/30 shadow-lg hover:shadow-[#38BDF8]/20 transition-all flex items-center gap-2"
+                className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/30 shadow-lg hover:shadow-[#38BDF8]/20 transition-all flex items-center gap-2"
               >
-                <Theater className="w-4 h-4 text-[#38BDF8]" />
-                Join Next Sunday Drama Service
+                <Music className="w-4 h-4 text-[#38BDF8]" />
+                Join Next Thursday Encounter Service
               </a>
             </div>
 
           </div>
 
-          {/* Right Column: Visual Stage Image */}
+          {/* Right Column: Visual Worship Image */}
           <div className="lg:col-span-6 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none">
-              <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-[#7A0C1E] via-[#38BDF8] to-[#7A0C1E] opacity-40 blur-xl"></div>
+              <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-[#6E0A1A] via-[#38BDF8] to-[#6E0A1A] opacity-40 blur-xl"></div>
               
               <div className="relative rounded-3xl overflow-hidden glass-panel border border-white/15 shadow-2xl">
                 <div className="relative h-[420px] w-full">
                   <Image
-                    src="/images/drama.png"
-                    alt="Vine Drama Ministry Gospel Performance"
+                    src="/images/worship.png"
+                    alt="Thursday Encounter Service Worship"
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent"></div>
 
-                  <div className="absolute bottom-6 left-6 right-6 glass-panel-oxblood p-4 rounded-2xl border border-[#7A0C1E] flex items-center justify-between">
+                  <div className="absolute bottom-6 left-6 right-6 glass-panel-oxblood p-4 rounded-2xl border border-[#6E0A1A] flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-bold text-[#38BDF8] uppercase tracking-wider">Vine Drama Ministry</div>
-                      <div className="text-sm font-bold text-white">Sunday Live Stage Presentation</div>
+                      <div className="text-xs font-bold text-[#38BDF8] uppercase tracking-wider">Encounter Service</div>
+                      <div className="text-sm font-bold text-white">Thursday Flagship Service</div>
                     </div>
                     <span className="px-3 py-1 rounded-full bg-[#38BDF8]/20 border border-[#38BDF8] text-[10px] text-white font-bold">
                       4:00 PM
