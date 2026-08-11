@@ -5,26 +5,44 @@ import Image from "next/image";
 import { Play, Calendar, ShieldCheck, Flame, Clock } from "lucide-react";
 
 export default function Hero() {
-  // Live service countdown calculation
-  const [timeLeft, setTimeLeft] = useState({ hours: 14, minutes: 35, seconds: 20 });
+  const getNextEncounter = () => {
+    const now = new Date();
+    const target = new Date(now);
+    const diff = (4 - now.getDay() + 7) % 7;
+    target.setDate(now.getDate() + diff);
+    target.setHours(16, 0, 0, 0);
+    return target.getTime() <= now.getTime()
+      ? target.getTime() + 7 * 86400000
+      : target.getTime();
+  };
+
+  const [target, setTarget] = useState(getNextEncounter);
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
-        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        return { hours: 24, minutes: 0, seconds: 0 };
+    const tick = () => {
+      const remaining = Math.max(0, target - Date.now());
+      if (remaining === 0) {
+        setTarget(getNextEncounter());
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      setTimeLeft({
+        hours: Math.floor(remaining / 3.6e6),
+        minutes: Math.floor((remaining % 3.6e6) / 6e4),
+        seconds: Math.floor((remaining % 6e4) / 1e3),
       });
-    }, 1000);
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [target]);
 
   return (
-    <section id="hero" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-[#0B1120]">
+    <section id="hero" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gim-dark">
       {/* Dynamic Background Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#6E0A1A]/20 rounded-full blur-[140px] pointer-events-none"></div>
-      <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-[#0EA5E9]/15 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gim-oxblood/20 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-gim-skyblue/15 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute inset-0 bg-pattern-grid opacity-40 pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -34,7 +52,7 @@ export default function Hero() {
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             {/* Top Pill */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
-              <Flame className="w-4 h-4 text-[#38BDF8] animate-pulse" />
+              <Flame className="w-4 h-4 text-gim-skyblue-bright animate-pulse" />
               <span className="text-xs font-semibold tracking-wider text-slate-200 uppercase">
                 Gospel Inn Ministry • Lead Pastor Ameh Amana
               </span>
@@ -43,7 +61,7 @@ export default function Hero() {
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
               A Sanctuary of <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#7DD3FC] to-[#38BDF8]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gim-skyblue-light to-gim-skyblue-bright">
                 Prayer, Encounter
               </span>{" "}
               & Transformation
@@ -58,17 +76,17 @@ export default function Hero() {
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
               <a
                 href="#schedule"
-                className="px-7 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#6E0A1A] via-[#9E1B32] to-[#6E0A1A] border border-[#38BDF8]/40 shadow-xl shadow-[#6E0A1A]/40 hover:shadow-[#38BDF8]/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 text-sm"
+                className="px-7 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-gim-oxblood via-gim-oxblood-hover to-gim-oxblood border border-gim-skyblue-bright/40 shadow-xl shadow-gim-oxblood/40 hover:shadow-gim-skyblue-bright/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 text-sm"
               >
-                <Calendar className="w-4 h-4 text-[#38BDF8]" />
+                <Calendar className="w-4 h-4 text-gim-skyblue-bright" />
                 Join Our Next Service
               </a>
 
               <a
                 href="#sermons"
-                className="px-6 py-3.5 rounded-xl font-semibold text-slate-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#38BDF8]/50 backdrop-blur-md transition-all flex items-center gap-2 text-sm"
+                className="px-6 py-3.5 rounded-xl font-semibold text-slate-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/15 hover:border-gim-skyblue-bright/50 backdrop-blur-md transition-all flex items-center gap-2 text-sm"
               >
-                <Play className="w-4 h-4 text-[#38BDF8] fill-[#38BDF8]" />
+                <Play className="w-4 h-4 text-gim-skyblue-bright fill-gim-skyblue-bright" />
                 Watch Messages
               </a>
             </div>
@@ -77,7 +95,7 @@ export default function Hero() {
             <div className="pt-4">
               <div className="glass-panel p-4 rounded-2xl border border-white/10 max-w-lg mx-auto lg:mx-0 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-3 text-left">
-                  <div className="p-2.5 rounded-xl bg-[#6E0A1A]/40 border border-[#6E0A1A] text-[#38BDF8]">
+                  <div className="p-2.5 rounded-xl bg-gim-oxblood/40 border border-gim-oxblood text-gim-skyblue-bright">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
@@ -89,7 +107,7 @@ export default function Hero() {
                 {/* Countdown display */}
                 <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-xl border border-white/5 text-center">
                   <div>
-                    <span className="text-sm font-bold text-[#38BDF8]">{String(timeLeft.hours).padStart(2, "0")}</span>
+                    <span className="text-sm font-bold text-gim-skyblue-bright">{String(timeLeft.hours).padStart(2, "0")}</span>
                     <span className="text-[10px] text-slate-400 block -mt-1">hrs</span>
                   </div>
                   <span className="text-slate-500 font-bold">:</span>
@@ -99,7 +117,7 @@ export default function Hero() {
                   </div>
                   <span className="text-slate-500 font-bold">:</span>
                   <div>
-                    <span className="text-sm font-bold text-[#38BDF8]">{String(timeLeft.seconds).padStart(2, "0")}</span>
+                    <span className="text-sm font-bold text-gim-skyblue-bright">{String(timeLeft.seconds).padStart(2, "0")}</span>
                     <span className="text-[10px] text-slate-400 block -mt-1">sec</span>
                   </div>
                 </div>
@@ -113,7 +131,7 @@ export default function Hero() {
                 <div className="text-xs text-slate-400">Services & Classes</div>
               </div>
               <div>
-                <div className="text-xl sm:text-2xl font-black text-[#38BDF8]">7 Annual</div>
+                <div className="text-xl sm:text-2xl font-black text-gim-skyblue-bright">7 Annual</div>
                 <div className="text-xs text-slate-400">Flagship Conferences</div>
               </div>
               <div>
@@ -128,29 +146,30 @@ export default function Hero() {
           <div className="lg:col-span-5 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none">
               {/* Outer decorative card frame */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-[#6E0A1A] via-[#38BDF8] to-[#6E0A1A] opacity-50 blur-lg"></div>
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-gim-oxblood via-gim-skyblue-bright to-gim-oxblood opacity-50 blur-lg"></div>
 
               <div className="relative rounded-3xl overflow-hidden glass-panel border border-white/15 shadow-2xl">
                 <div className="relative h-[420px] w-full">
                   <Image
-                    src="/images/worship.png"
+                    src="/images/hero-worship.png"
                     alt="Gospel Inn Ministry Worship Service"
                     fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
                     priority
                     className="object-cover object-center transform hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/40 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-gim-dark via-gim-dark/40 to-transparent"></div>
 
                   {/* Floating Overlay Badge 1 */}
-                  <div className="absolute top-4 left-4 glass-panel-oxblood px-3 py-2 rounded-xl flex items-center gap-2 border border-[#6E0A1A]">
-                    <ShieldCheck className="w-4 h-4 text-[#38BDF8]" />
+                  <div className="absolute top-4 left-4 glass-panel-oxblood px-3 py-2 rounded-xl flex items-center gap-2 border border-gim-oxblood">
+                    <ShieldCheck className="w-4 h-4 text-gim-skyblue-bright" />
                     <span className="text-xs font-semibold text-white">Pastor Ameh Amana</span>
                   </div>
 
                   {/* Floating Overlay Badge 2 */}
                   <div className="absolute bottom-6 left-6 right-6 glass-panel p-4 rounded-2xl border border-white/10 text-left">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
+                      <span className="text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">
                         Encounter Service
                       </span>
                       <span className="text-[10px] text-slate-400">Thursdays 4:00 PM</span>
