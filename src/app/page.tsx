@@ -15,7 +15,7 @@ export default function Home() {
   const [givingModalOpen, setGivingModalOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-[#0B1120] text-slate-100 selection:bg-[#6E0A1A] selection:text-white relative">
+    <main className="min-h-screen bg-gim-dark text-slate-100 selection:bg-gim-oxblood selection:text-white relative">
       {/* Navigation Header */}
       <Navbar onOpenGiving={() => setGivingModalOpen(true)} />
 
@@ -38,10 +38,7 @@ export default function Home() {
       <SermonsHub />
 
       {/* Interactive Modals */}
-      <GivingModal
-        isOpen={givingModalOpen}
-        onClose={() => setGivingModalOpen(false)}
-      />
+      {givingModalOpen && <GivingModal onClose={() => setGivingModalOpen(false)} />}
 
       {/* Footer */}
       <Footer />

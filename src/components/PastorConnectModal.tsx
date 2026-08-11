@@ -17,13 +17,14 @@ const PREACHING_FORM_ENDPOINT =
   "https://script.google.com/macros/s/AKfycbz6HNpdi7GuoUUdeGSHmJftKzshxqHbFveEf_hgBKOQ_vl_HBfYwvMJ8Yo6FGQneEPA/exec";
 
 interface PastorConnectModalProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
 }
 
-export default function PastorConnectModal({ isOpen, onClose }: PastorConnectModalProps) {
+export default function PastorConnectModal({ isOpen = true, onClose }: PastorConnectModalProps) {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -63,6 +64,7 @@ export default function PastorConnectModal({ isOpen, onClose }: PastorConnectMod
     const data = Object.fromEntries(new FormData(form).entries());
 
     setSubmitting(true);
+    setSubmitError(false);
     if (PREACHING_FORM_ENDPOINT) {
       try {
         await fetch(PREACHING_FORM_ENDPOINT, {
@@ -72,7 +74,11 @@ export default function PastorConnectModal({ isOpen, onClose }: PastorConnectMod
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({ ...data, submittedAt: new Date().toISOString() }),
         });
-      } catch {}
+      } catch {
+        setSubmitting(false);
+        setSubmitError(true);
+        return;
+      }
     } else {
       const subject = encodeURIComponent(`Preaching Engagement Invitation — ${data.name}`);
       const body = encodeURIComponent(
@@ -119,7 +125,7 @@ export default function PastorConnectModal({ isOpen, onClose }: PastorConnectMod
 
         {submitted ? (
           <div className="text-center py-10 space-y-3">
-            <div className="w-16 h-16 rounded-full bg-[#6E0A1A]/50 border-2 border-[#38BDF8] flex items-center justify-center mx-auto text-[#38BDF8]">
+            <div className="w-16 h-16 rounded-full bg-gim-oxblood/50 border-2 border-gim-skyblue-bright flex items-center justify-center mx-auto text-gim-skyblue-bright">
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <h3 className="text-2xl font-bold text-white">Request Received!</h3>
@@ -131,7 +137,7 @@ export default function PastorConnectModal({ isOpen, onClose }: PastorConnectMod
           <>
             {/* Header */}
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#6E0A1A]/40 border border-[#6E0A1A] text-[11px] font-bold text-[#38BDF8]">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gim-oxblood/40 border border-gim-oxblood text-[11px] font-bold text-gim-skyblue-bright">
                 <User className="w-3.5 h-3.5" />
                 Pastor Ameh Amana
               </div>
@@ -153,9 +159,9 @@ export default function PastorConnectModal({ isOpen, onClose }: PastorConnectMod
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-[#38BDF8]/50 hover:bg-white/10 transition-all"
+                      className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-gim-skyblue-bright/50 hover:bg-white/10 transition-all"
                     >
-                      <div className="p-2.5 rounded-xl bg-[#6E0A1A]/40 border border-[#6E0A1A] text-[#38BDF8] shrink-0">
+                      <div className="p-2.5 rounded-xl bg-gim-oxblood/40 border border-gim-oxblood text-gim-skyblue-bright shrink-0">
                         <IconComp className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
@@ -169,9 +175,9 @@ export default function PastorConnectModal({ isOpen, onClose }: PastorConnectMod
             </div>
 
             {/* Preaching Engagement Form */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#6E0A1A]/40 to-[#0B1120] border border-[#6E0A1A]">
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-gim-oxblood/40 to-gim-dark border border-gim-oxblood">
               <h4 className="text-sm font-bold text-white flex items-center gap-2 mb-1">
-                <CalendarCheck className="w-4 h-4 text-[#38BDF8]" />
+                <CalendarCheck className="w-4 h-4 text-gim-skyblue-bright" />
                 Preaching Engagement Request
               </h4>
               <p className="text-[11px] text-slate-300 mb-4">
@@ -184,37 +190,37 @@ export default function PastorConnectModal({ isOpen, onClose }: PastorConnectMod
                     name="name"
                     type="text"
                     placeholder="Full Name"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
                   />
                   <input
                     required
                     name="email"
                     type="email"
                     placeholder="Email Address"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
                   />
                   <input
                     name="phone"
                     type="tel"
                     placeholder="Phone (Optional)"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
                   />
                   <input
                     name="organization"
                     type="text"
                     placeholder="Church / Organization"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
                   />
                   <input
                     name="eventDate"
                     type="date"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
                   />
                   <input
                     name="location"
                     type="text"
                     placeholder="Event Location"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
                   />
                 </div>
                 <textarea
@@ -222,12 +228,17 @@ export default function PastorConnectModal({ isOpen, onClose }: PastorConnectMod
                   name="message"
                   placeholder="Tell us about your event..."
                   rows={3}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8] resize-none"
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
                 ></textarea>
+                {submitError && (
+                  <p role="alert" className="text-xs text-red-400 font-semibold">
+                    Sorry, your request could not be sent right now. Please try again, or email us directly at info@gospelinnministry.org.
+                  </p>
+                )}
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/40 shadow-lg hover:shadow-[#38BDF8]/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="w-full py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/40 shadow-lg hover:shadow-gim-skyblue-bright/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   <Send className="w-4 h-4" />
                   {submitting ? "Submitting..." : "Submit Invitation Request"}

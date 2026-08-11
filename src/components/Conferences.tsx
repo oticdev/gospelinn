@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sparkles, Users, Award, Shield, Music, Flame, HeartHandshake, ChevronRight, X, CheckCircle2, type LucideIcon } from "lucide-react";
+import { Sparkles, Users, Award, Shield, Music, Flame, HeartHandshake, ChevronRight, X, Phone, type LucideIcon } from "lucide-react";
 
 interface Conference {
   id: string;
@@ -17,7 +17,6 @@ interface Conference {
 
 export default function Conferences() {
   const [selectedConference, setSelectedConference] = useState<Conference | null>(null);
-  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   const conferences: Conference[] = [
     {
@@ -99,15 +98,6 @@ export default function Conferences() {
     },
   ];
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    setRegisterSuccess(true);
-    setTimeout(() => {
-      setRegisterSuccess(false);
-      setSelectedConference(null);
-    }, 2500);
-  };
-
   useEffect(() => {
     if (!selectedConference) return;
     const onKey = (e: KeyboardEvent) => {
@@ -118,21 +108,21 @@ export default function Conferences() {
   }, [selectedConference]);
 
   return (
-    <section id="conferences" className="py-24 bg-[#0F172A] relative overflow-hidden">
+    <section id="conferences" className="py-24 bg-slate-900 relative overflow-hidden">
       {/* Background Orbs */}
-      <div className="absolute top-1/3 left-0 w-96 h-96 bg-[#6E0A1A]/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/3 left-0 w-96 h-96 bg-gim-oxblood/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gim-skyblue-bright/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#6E0A1A]/30 border border-[#6E0A1A] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gim-oxblood/30 border border-gim-oxblood text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
             Kingdom Impact Conventions
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-            Flagship <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#7DD3FC] to-[#38BDF8]">Conferences & Outreaches</span>
+            Flagship <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gim-skyblue-light to-gim-skyblue-bright">Conferences & Outreaches</span>
           </h2>
           <p className="text-slate-300 text-base font-light">
             Empowering every demographic—Leaders, Men, Women, Youth, and Children—under God&apos;s holy altar.
@@ -147,32 +137,32 @@ export default function Conferences() {
             return (
               <div
                 key={conf.id}
-                className="group relative rounded-3xl p-6 glass-panel border border-white/10 hover:border-[#38BDF8]/50 transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between"
+                className="group relative rounded-3xl p-6 glass-panel border border-white/10 hover:border-gim-skyblue-bright/50 transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between"
               >
                 {/* Top Badge & Icon */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-[#6E0A1A]/40 text-[#38BDF8] border border-[#6E0A1A]">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-gim-oxblood/40 text-gim-skyblue-bright border border-gim-oxblood">
                       {conf.season}
                     </span>
-                    <div className="p-3 rounded-2xl bg-white/5 border border-white/10 text-[#38BDF8] group-hover:scale-110 transition-transform">
+                    <div className="p-3 rounded-2xl bg-white/5 border border-white/10 text-gim-skyblue-bright group-hover:scale-110 transition-transform">
                       <IconComponent className="w-6 h-6" />
                     </div>
                   </div>
 
                   {/* Title & Acronym */}
                   <div>
-                    <h3 className="text-xl font-extrabold text-white group-hover:text-[#38BDF8] transition-colors leading-snug">
+                    <h3 className="text-xl font-extrabold text-white group-hover:text-gim-skyblue-bright transition-colors leading-snug">
                       {conf.title}
                     </h3>
-                    <p className="text-xs font-semibold text-[#38BDF8] mt-1">
+                    <p className="text-xs font-semibold text-gim-skyblue-bright mt-1">
                       {conf.tagline}
                     </p>
                   </div>
 
                   {/* Target Audience */}
                   <div className="flex items-center gap-2 text-xs text-slate-400 font-medium pt-1">
-                    <Users className="w-3.5 h-3.5 text-[#6E0A1A]" />
+                    <Users className="w-3.5 h-3.5 text-gim-oxblood" />
                     <span>{conf.demographic}</span>
                   </div>
 
@@ -187,7 +177,7 @@ export default function Conferences() {
                   <span className="text-xs text-slate-400">Gospel Inn Ministry</span>
                   <button
                     onClick={() => setSelectedConference(conf)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] hover:from-[#9E1B32] hover:to-[#6E0A1A] border border-[#38BDF8]/30 flex items-center gap-1 transition-all"
+                    className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover hover:from-gim-oxblood-hover hover:to-gim-oxblood border border-gim-skyblue-bright/30 flex items-center gap-1 transition-all"
                   >
                     <span>Register / Info</span>
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -200,7 +190,7 @@ export default function Conferences() {
 
       </div>
 
-      {/* Conference Registration Modal */}
+      {/* Conference Info Modal */}
       {selectedConference && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in"
@@ -209,9 +199,9 @@ export default function Conferences() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={`${selectedConference.title} Registration`}
+            aria-label={`${selectedConference.title} — Information`}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-lg rounded-3xl glass-panel p-6 sm:p-8 border border-white/20 shadow-2xl space-y-5"
+            className="relative w-full max-w-lg rounded-3xl glass-panel p-6 sm:p-8 border border-white/20 shadow-2xl space-y-5 text-left"
           >
             <button
               onClick={() => setSelectedConference(null)}
@@ -220,75 +210,39 @@ export default function Conferences() {
               <X className="w-5 h-5" />
             </button>
 
-            {registerSuccess ? (
-              <div className="text-center py-8 space-y-3">
-                <CheckCircle2 className="w-14 h-14 text-[#38BDF8] mx-auto animate-bounce" />
-                <h3 className="text-2xl font-bold text-white">Registration Submitted!</h3>
-                <p className="text-xs text-slate-300">
-                  Thank you for registering for <strong className="text-white">{selectedConference.title}</strong>. Our event team will send schedule details to your email.
-                </p>
+            <div className="space-y-1">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gim-oxblood/40 border border-gim-oxblood text-[11px] font-bold text-gim-skyblue-bright uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" />
+                {selectedConference.season}
+              </span>
+              <h3 className="text-2xl font-black text-white">{selectedConference.title}</h3>
+              <p className="text-xs font-semibold text-gim-skyblue-bright">{selectedConference.tagline}</p>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-slate-300 font-medium pt-1">
+              <Users className="w-3.5 h-3.5 text-gim-oxblood" />
+              <span>{selectedConference.demographic}</span>
+            </div>
+
+            <p className="text-xs text-slate-300 font-light leading-relaxed">
+              {selectedConference.description}
+            </p>
+
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-gim-oxblood/40 to-gim-dark border border-gim-oxblood space-y-2">
+              <div className="text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">
+                Registration &amp; Details
               </div>
-            ) : (
-              <>
-                <div className="space-y-1 text-left">
-                  <span className="text-xs font-bold text-[#38BDF8] uppercase">
-                    Gospel Inn Ministry Event Registration
-                  </span>
-                  <h3 className="text-2xl font-black text-white">{selectedConference.title}</h3>
-                  <p className="text-xs text-slate-300">{selectedConference.tagline}</p>
-                </div>
-
-                <form onSubmit={handleRegister} className="space-y-4 text-left">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Full Name</label>
-                    <input
-                      required
-                      type="text"
-                      placeholder="e.g. Bro. Emmanuel Oko"
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">Phone Number</label>
-                      <input
-                        required
-                        type="tel"
-                        placeholder="+234..."
-                        className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
-                      <input
-                        required
-                        type="email"
-                        placeholder="you@example.com"
-                        className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Attending As</label>
-                    <select className="w-full px-4 py-2.5 rounded-xl bg-[#0B1120] border border-white/15 text-white text-sm focus:outline-none focus:border-[#38BDF8]">
-                      <option>First-time Delegate</option>
-                      <option>GIM Church Member</option>
-                      <option>Visiting Pastor / Minister</option>
-                      <option>Online Participant</option>
-                    </select>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/40 shadow-lg hover:shadow-[#38BDF8]/20 transition-all mt-2"
-                  >
-                    Confirm Registration
-                  </button>
-                </form>
-              </>
-            )}
+              <p className="text-xs text-slate-300 font-light">
+                To register or find out more about this gathering, call or WhatsApp the ministry office.
+              </p>
+              <a
+                href="tel:09127462401"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 transition-all hover:shadow-gim-skyblue-bright/20"
+              >
+                <Phone className="w-3.5 h-3.5 text-gim-skyblue-bright" />
+                0912 746 2401
+              </a>
+            </div>
           </div>
         </div>
       )}

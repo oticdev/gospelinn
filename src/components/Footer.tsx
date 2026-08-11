@@ -15,17 +15,17 @@ export default function Footer() {
   };
 
   return (
-    <footer id="contact" className="bg-[#0B1120] border-t border-white/10 pt-16 pb-12 relative overflow-hidden text-left">
+    <footer id="contact" className="bg-gim-dark border-t border-white/10 pt-16 pb-12 relative overflow-hidden text-left">
       {/* Background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#6E0A1A]/15 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gim-oxblood/15 rounded-full blur-[140px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Top Section: Newsletter Card */}
-        <div className="glass-panel-oxblood p-8 rounded-3xl border border-[#6E0A1A] mb-16 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="glass-panel-oxblood p-8 rounded-3xl border border-gim-oxblood mb-16 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <h3 className="text-xl font-bold text-white flex items-center gap-2 justify-center md:justify-start">
-              <Sparkles className="w-5 h-5 text-[#38BDF8]" />
+              <Sparkles className="w-5 h-5 text-gim-skyblue-bright" />
               Subscribe to GIM Daily Devotional & Updates
             </h3>
             <p className="text-xs text-slate-300 font-light">
@@ -35,8 +35,8 @@ export default function Footer() {
 
           <form onSubmit={handleSubscribe} className="flex items-center gap-2 w-full md:w-auto">
             {subscribed ? (
-              <div className="px-4 py-2.5 rounded-xl bg-[#0EA5E9]/20 border border-[#38BDF8] text-xs text-white font-bold flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#38BDF8]" /> Subscribed Successfully!
+              <div className="px-4 py-2.5 rounded-xl bg-gim-skyblue/20 border border-gim-skyblue-bright text-xs text-white font-bold flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-gim-skyblue-bright" /> Subscribed Successfully!
               </div>
             ) : (
               <>
@@ -44,11 +44,11 @@ export default function Footer() {
                   required
                   type="email"
                   placeholder="Enter email address..."
-                  className="px-4 py-2.5 rounded-xl bg-black/50 border border-white/20 text-white text-xs focus:outline-none focus:border-[#38BDF8] w-full md:w-64"
+                  className="px-4 py-2.5 rounded-xl bg-black/50 border border-white/20 text-white text-xs focus:outline-none focus:border-gim-skyblue-bright w-full md:w-64"
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/30 shadow-md shrink-0 flex items-center gap-1.5"
+                  className="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 shadow-md shrink-0 flex items-center gap-1.5"
                 >
                   <Send className="w-3.5 h-3.5" />
                   Join
@@ -74,7 +74,7 @@ export default function Footer() {
 
           {/* Column 2: Weekly Schedule Overview */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-[#38BDF8]">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-gim-skyblue-bright">
               Weekly Services
             </h4>
             <ul className="space-y-2 text-xs text-slate-300 font-light">
@@ -99,7 +99,7 @@ export default function Footer() {
 
           {/* Column 3: Quick Links */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-[#38BDF8]">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-gim-skyblue-bright">
               Conferences
             </h4>
             <ul className="space-y-2 text-xs text-slate-300">
@@ -114,20 +114,20 @@ export default function Footer() {
 
           {/* Column 4: Contact Info */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-[#38BDF8]">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-gim-skyblue-bright">
               Sanctuary Contact
             </h4>
             <div className="space-y-2.5 text-xs text-slate-300">
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#6E0A1A] shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-gim-oxblood shrink-0 mt-0.5" />
                 <span>Gospel Inn Ministry Cathedral, Main Sanctuary</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#38BDF8] shrink-0" />
+                <Phone className="w-4 h-4 text-gim-skyblue-bright shrink-0" />
                 <a href="tel:09127462401" className="hover:text-white transition-colors">0912 746 2401</a>
               </div>
               <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-[#38BDF8] shrink-0" />
+                <Mail className="w-4 h-4 text-gim-skyblue-bright shrink-0" />
                 <span>info@gospelinnministry.org</span>
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function Footer() {
           <div className="flex items-center space-x-6">
             <a href="#" className="hover:text-slate-300">Privacy Policy</a>
             <a href="#" className="hover:text-slate-300">Terms of Service</a>
-            <a href="#hero" className="text-[#38BDF8] hover:underline font-semibold">Back to Top ↑</a>
+            <a href="#hero" className="text-gim-skyblue-bright hover:underline font-semibold">Back to Top ↑</a>
           </div>
         </div>
 

@@ -35,7 +35,7 @@ export default function Logo({
       <div
         className={`relative shrink-0 rounded-full transition-all duration-300 group-hover:scale-105 ${
           variant === "gold"
-            ? "border border-[#EAB308]/50 shadow-[0_0_20px_rgba(234,179,8,0.25)] bg-[#1A1608]"
+            ? "border border-gim-gold/50 shadow-[0_0_20px_rgba(234,179,8,0.25)] bg-gim-gold-dark"
             : "border border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.2)] bg-slate-900"
         }`}
         style={{ width: selectedDim.img, height: selectedDim.img }}
@@ -51,7 +51,7 @@ export default function Logo({
         {/* Glow ambient overlay */}
         <div
           className={`absolute inset-0 rounded-full blur-md opacity-30 group-hover:opacity-60 transition-opacity ${
-            variant === "gold" ? "bg-[#EAB308]" : "bg-[#38BDF8]"
+            variant === "gold" ? "bg-gim-gold" : "bg-gim-skyblue-bright"
           }`}
         ></div>
       </div>
@@ -73,7 +73,7 @@ export default function Logo({
               className={`font-bold px-2 py-0.5 rounded-full border shadow-sm ${selectedDim.badge} ${
                 variant === "gold"
                   ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
-                  : "bg-[#38BDF8]/10 text-[#38BDF8] border-[#38BDF8]/30"
+                  : "bg-gim-skyblue-bright/10 text-gim-skyblue-bright border-gim-skyblue-bright/30"
               }`}
             >
               MINISTRY

@@ -6,10 +6,10 @@ import { Sparkles, Flame, Music, Calendar } from "lucide-react";
 
 export default function EncounterService() {
   return (
-    <section id="encounter" className="py-24 bg-[#0B1120] relative overflow-hidden">
+    <section id="encounter" className="py-24 bg-gim-dark relative overflow-hidden">
       {/* Glows */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[#6E0A1A]/25 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#0EA5E9]/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-gim-oxblood/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-gim-skyblue/15 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -18,14 +18,14 @@ export default function EncounterService() {
           {/* Left Column: Information & Features */}
           <div className="lg:col-span-6 space-y-6">
             
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#6E0A1A]/30 border border-[#6E0A1A] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gim-oxblood/30 border border-gim-oxblood text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">
               <Calendar className="w-3.5 h-3.5" />
               Every Thursday @ 4:00 PM
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
               The Flagship <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#7DD3FC] to-[#38BDF8]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gim-skyblue-light to-gim-skyblue-bright">
                 Thursday Encounter Service
               </span>
             </h2>
@@ -35,8 +35,8 @@ export default function EncounterService() {
             </p>
 
             <div className="space-y-4 pt-2">
-              <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-[#38BDF8]/40 transition-colors">
-                <div className="p-3 rounded-xl bg-[#6E0A1A]/40 border border-[#6E0A1A] text-[#38BDF8] shrink-0">
+              <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-gim-skyblue-bright/40 transition-colors">
+                <div className="p-3 rounded-xl bg-gim-oxblood/40 border border-gim-oxblood text-gim-skyblue-bright shrink-0">
                   <Flame className="w-5 h-5" />
                 </div>
                 <div>
@@ -47,8 +47,8 @@ export default function EncounterService() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-[#38BDF8]/40 transition-colors">
-                <div className="p-3 rounded-xl bg-[#0EA5E9]/20 border border-[#0EA5E9]/40 text-[#38BDF8] shrink-0">
+              <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-gim-skyblue-bright/40 transition-colors">
+                <div className="p-3 rounded-xl bg-gim-skyblue/20 border border-gim-skyblue/40 text-gim-skyblue-bright shrink-0">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
@@ -63,9 +63,9 @@ export default function EncounterService() {
             <div className="flex items-center gap-4 pt-4">
               <a
                 href="#schedule"
-                className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#6E0A1A] to-[#9E1B32] border border-[#38BDF8]/30 shadow-lg hover:shadow-[#38BDF8]/20 transition-all flex items-center gap-2"
+                className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 shadow-lg hover:shadow-gim-skyblue-bright/20 transition-all flex items-center gap-2"
               >
-                <Music className="w-4 h-4 text-[#38BDF8]" />
+                <Music className="w-4 h-4 text-gim-skyblue-bright" />
                 Join Next Thursday Encounter Service
               </a>
             </div>
@@ -75,25 +75,25 @@ export default function EncounterService() {
           {/* Right Column: Visual Worship Image */}
           <div className="lg:col-span-6 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none">
-              <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-[#6E0A1A] via-[#38BDF8] to-[#6E0A1A] opacity-40 blur-xl"></div>
+              <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-gim-oxblood via-gim-skyblue-bright to-gim-oxblood opacity-40 blur-xl"></div>
               
               <div className="relative rounded-3xl overflow-hidden glass-panel border border-white/15 shadow-2xl">
                 <div className="relative h-[420px] w-full">
                   <Image
-                    src="/images/worship.png"
+                    src="/images/encounter-worship.png"
                     alt="Thursday Encounter Service Worship"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-gim-dark via-transparent to-transparent"></div>
 
-                  <div className="absolute bottom-6 left-6 right-6 glass-panel-oxblood p-4 rounded-2xl border border-[#6E0A1A] flex items-center justify-between">
+                  <div className="absolute bottom-6 left-6 right-6 glass-panel-oxblood p-4 rounded-2xl border border-gim-oxblood flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-bold text-[#38BDF8] uppercase tracking-wider">Encounter Service</div>
+                      <div className="text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">Encounter Service</div>
                       <div className="text-sm font-bold text-white">Thursday Flagship Service</div>
                     </div>
-                    <span className="px-3 py-1 rounded-full bg-[#38BDF8]/20 border border-[#38BDF8] text-[10px] text-white font-bold">
+                    <span className="px-3 py-1 rounded-full bg-gim-skyblue-bright/20 border border-gim-skyblue-bright text-[10px] text-white font-bold">
                       4:00 PM
                     </span>
                   </div>

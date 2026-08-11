@@ -95,21 +95,21 @@ export default function SermonsHub() {
   });
 
   return (
-    <section id="sermons" className="py-24 bg-[#0F172A] relative overflow-hidden">
+    <section id="sermons" className="py-24 bg-slate-900 relative overflow-hidden">
       {/* Glows */}
-      <div className="absolute top-0 right-10 w-96 h-96 bg-[#6E0A1A]/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-0 right-10 w-96 h-96 bg-gim-oxblood/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-gim-skyblue-bright/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#6E0A1A]/30 border border-[#6E0A1A] text-xs font-bold text-[#38BDF8] uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gim-oxblood/30 border border-gim-oxblood text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">
             <Mic className="w-3.5 h-3.5" />
             Word & Messages Archive
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-            Sermons & <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#7DD3FC] to-[#38BDF8]">Media Hub</span>
+            Sermons & <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gim-skyblue-light to-gim-skyblue-bright">Media Hub</span>
           </h2>
           <p className="text-slate-300 text-base font-light">
             Listen, watch, and download life-transforming messages by Lead Pastor Ameh Amana.
@@ -127,7 +127,7 @@ export default function SermonsHub() {
               placeholder="Search sermons or topics..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-[#38BDF8]"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-gim-skyblue-bright"
             />
           </div>
 
@@ -139,7 +139,7 @@ export default function SermonsHub() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   activeCategory === cat
-                    ? "bg-[#6E0A1A] text-white border border-[#38BDF8]/40"
+                    ? "bg-gim-oxblood text-white border border-gim-skyblue-bright/40"
                     : "bg-white/5 text-slate-300 hover:text-white hover:bg-white/10"
                 }`}
               >
@@ -155,27 +155,27 @@ export default function SermonsHub() {
           {filteredSermons.map((sermon) => (
             <div
               key={sermon.id}
-              className="group relative rounded-3xl overflow-hidden glass-panel border border-white/10 hover:border-[#38BDF8]/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative rounded-3xl overflow-hidden glass-panel border border-white/10 hover:border-gim-skyblue-bright/50 transition-all duration-300 flex flex-col justify-between"
             >
               {/* Media Thumbnail Placeholder */}
-              <div className="relative h-48 w-full bg-gradient-to-br from-[#6E0A1A]/60 to-[#0B1120] flex items-center justify-center p-6 text-center">
+              <div className="relative h-48 w-full bg-gradient-to-br from-gim-oxblood/60 to-gim-dark flex items-center justify-center p-6 text-center">
                 <div className="absolute inset-0 bg-pattern-grid opacity-30"></div>
                 
                 <button
                   onClick={() => setActiveMediaModal(sermon)}
-                  className="w-14 h-14 rounded-full bg-[#6E0A1A] border-2 border-[#38BDF8] flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform relative z-10"
+                  className="w-14 h-14 rounded-full bg-gim-oxblood border-2 border-gim-skyblue-bright flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform relative z-10"
                 >
                   <Play className="w-6 h-6 fill-white ml-1 text-white" />
                 </button>
 
                 {/* Duration Badge */}
                 <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-black/70 text-[10px] font-bold text-white flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-[#38BDF8]" />
+                  <Clock className="w-3 h-3 text-gim-skyblue-bright" />
                   <span>{sermon.duration}</span>
                 </div>
 
                 {/* Category Pill */}
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#6E0A1A]/80 text-[10px] font-bold text-[#38BDF8] border border-[#6E0A1A]">
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-gim-oxblood/80 text-[10px] font-bold text-gim-skyblue-bright border border-gim-oxblood">
                   {sermon.category}
                 </div>
               </div>
@@ -183,13 +183,13 @@ export default function SermonsHub() {
               {/* Sermon Information */}
               <div className="p-5 space-y-3">
                 <div className="flex items-center gap-2 text-[11px] text-slate-400">
-                  <User className="w-3.5 h-3.5 text-[#38BDF8]" />
+                  <User className="w-3.5 h-3.5 text-gim-skyblue-bright" />
                   <span>{sermon.speaker}</span>
                   <span>•</span>
                   <span>{sermon.date}</span>
                 </div>
 
-                <h3 className="text-base font-bold text-white group-hover:text-[#38BDF8] transition-colors leading-snug line-clamp-2">
+                <h3 className="text-base font-bold text-white group-hover:text-gim-skyblue-bright transition-colors leading-snug line-clamp-2">
                   {sermon.title}
                 </h3>
 
@@ -205,7 +205,7 @@ export default function SermonsHub() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setActiveMediaModal(sermon)}
-                    className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-[#38BDF8]"
+                    className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gim-skyblue-bright"
                     title="Watch Sermon Video"
                   >
                     <Video className="w-4 h-4" />
@@ -247,7 +247,7 @@ export default function SermonsHub() {
             </button>
 
             <div className="space-y-1 text-left">
-              <span className="text-xs font-bold text-[#38BDF8] uppercase">{activeMediaModal.category} Message</span>
+              <span className="text-xs font-bold text-gim-skyblue-bright uppercase">{activeMediaModal.category} Message</span>
               <h3 className="text-xl font-bold text-white">{activeMediaModal.title}</h3>
               <p className="text-xs text-slate-400">Speaker: {activeMediaModal.speaker} • {activeMediaModal.date}</p>
             </div>
