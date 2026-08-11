@@ -83,6 +83,7 @@ export default function EncounterService() {
                     src="/images/worship.png"
                     alt="Thursday Encounter Service Worship"
                     fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent"></div>

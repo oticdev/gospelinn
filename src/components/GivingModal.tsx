@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Heart, Copy, Check, CreditCard, Landmark, Sparkles, X, ShieldCheck } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Heart, Copy, Check, CreditCard, Landmark, X, ShieldCheck } from "lucide-react";
 import confetti from "canvas-confetti";
 
 interface GivingModalProps {
@@ -13,6 +13,15 @@ export default function GivingModal({ isOpen, onClose }: GivingModalProps) {
   const [selectedFund, setSelectedFund] = useState("Tithe & Offering");
   const [copiedAcc, setCopiedAcc] = useState(false);
   const [givenSuccess, setGivenSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -43,8 +52,17 @@ export default function GivingModal({ isOpen, onClose }: GivingModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in">
-      <div className="relative w-full max-w-lg rounded-3xl glass-panel p-6 sm:p-8 border border-white/20 shadow-2xl space-y-6 text-left">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Online Giving & Partnership"
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg rounded-3xl glass-panel p-6 sm:p-8 border border-white/20 shadow-2xl space-y-6 text-left"
+      >
         
         {/* Close Button */}
         <button

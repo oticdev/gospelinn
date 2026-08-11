@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Logo from "./Logo";
-import { Mail, Phone, MapPin, Send, Heart, Sparkles, MessageCircle, CheckCircle2, Globe, Video, Share2 } from "lucide-react";
+import SocialLinks from "./SocialLinks";
+import { Mail, Phone, MapPin, Send, Sparkles, CheckCircle2 } from "lucide-react";
 
 export default function Footer() {
   const [subscribed, setSubscribed] = useState(false);
@@ -67,18 +68,7 @@ export default function Footer() {
               Gospel Inn Ministry is a sanctuary of prayer, discipleship, encounters, and kingdom transformation led by <strong className="text-white">Lead Pastor Ameh Amana</strong>.
             </p>
             <div className="flex items-center space-x-3 pt-2">
-              <a href="#" className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-[#38BDF8] hover:border-[#38BDF8]/40 transition-colors" title="YouTube Live">
-                <Video className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-[#38BDF8] hover:border-[#38BDF8]/40 transition-colors" title="WhatsApp Channel">
-                <MessageCircle className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-[#38BDF8] hover:border-[#38BDF8]/40 transition-colors" title="Global Outreach">
-                <Globe className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-[#38BDF8] hover:border-[#38BDF8]/40 transition-colors" title="Share Ministry">
-                <Share2 className="w-4 h-4" />
-              </a>
+              <SocialLinks />
             </div>
           </div>
 
@@ -134,7 +124,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[#38BDF8] shrink-0" />
-                <span>+234 800 GOSPEL INN</span>
+                <a href="tel:09127462401" className="hover:text-white transition-colors">0912 746 2401</a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-[#38BDF8] shrink-0" />

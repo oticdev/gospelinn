@@ -56,6 +56,7 @@ export default function PastorSpotlight() {
                     src="/images/daddyAmeh.jpeg"
                     alt="Lead Pastor Ameh Amana - Gospel Inn Ministry"
                     fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
                     className="object-cover object-top group-hover/connect:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent"></div>

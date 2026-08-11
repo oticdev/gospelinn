@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Sparkles, Calendar, Users, Award, Shield, Music, Flame, HeartHandshake, ChevronRight, X, CheckCircle2 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Sparkles, Users, Award, Shield, Music, Flame, HeartHandshake, ChevronRight, X, CheckCircle2, type LucideIcon } from "lucide-react";
 
 interface Conference {
   id: string;
@@ -10,7 +10,7 @@ interface Conference {
   tagline: string;
   demographic: string;
   description: string;
-  icon: any;
+  icon: LucideIcon;
   color: "oxblood" | "skyblue" | "gold";
   season: string;
 }
@@ -108,6 +108,15 @@ export default function Conferences() {
     }, 2500);
   };
 
+  useEffect(() => {
+    if (!selectedConference) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedConference(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedConference]);
+
   return (
     <section id="conferences" className="py-24 bg-[#0F172A] relative overflow-hidden">
       {/* Background Orbs */}
@@ -134,8 +143,6 @@ export default function Conferences() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {conferences.map((conf) => {
             const IconComponent = conf.icon;
-            const isOxblood = conf.color === "oxblood";
-            const isGold = conf.color === "gold";
 
             return (
               <div
@@ -195,8 +202,17 @@ export default function Conferences() {
 
       {/* Conference Registration Modal */}
       {selectedConference && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-          <div className="relative w-full max-w-lg rounded-3xl glass-panel p-6 sm:p-8 border border-white/20 shadow-2xl space-y-5">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in"
+          onClick={() => setSelectedConference(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${selectedConference.title} Registration`}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-lg rounded-3xl glass-panel p-6 sm:p-8 border border-white/20 shadow-2xl space-y-5"
+          >
             <button
               onClick={() => setSelectedConference(null)}
               className="absolute top-5 right-5 p-2 text-slate-400 hover:text-white rounded-full bg-white/5"

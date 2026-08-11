@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Calendar, Clock, MapPin, Bell, Sparkles, Flame, CheckCircle2, Moon, Shield } from "lucide-react";
+import { Calendar, Clock, MapPin, Bell, Sparkles, Flame, CheckCircle2, Moon, Shield, type LucideIcon } from "lucide-react";
 
 interface ServiceEvent {
   id: string;
@@ -9,7 +9,7 @@ interface ServiceEvent {
   day: string;
   time: string;
   frequency: "Weekly" | "Monthly";
-  icon: any;
+  icon: LucideIcon;
   description: string;
   badge?: string;
   color: "oxblood" | "skyblue";

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Play, Mic, Video, Download, Share2, Search, Tag, X, Volume2, Clock, User, Sparkles } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Play, Mic, Video, Download, Search, X, Clock, User } from "lucide-react";
 
 interface Sermon {
   id: string;
@@ -20,6 +20,15 @@ export default function SermonsHub() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeMediaModal, setActiveMediaModal] = useState<Sermon | null>(null);
+
+  useEffect(() => {
+    if (!activeMediaModal) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveMediaModal(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [activeMediaModal]);
 
   const sermons: Sermon[] = [
     {
@@ -219,8 +228,17 @@ export default function SermonsHub() {
 
       {/* Video Player Modal */}
       {activeMediaModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-in fade-in">
-          <div className="relative w-full max-w-3xl rounded-3xl glass-panel p-6 border border-white/20 shadow-2xl space-y-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-in fade-in"
+          onClick={() => setActiveMediaModal(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${activeMediaModal.title} — Video Player`}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-3xl rounded-3xl glass-panel p-6 border border-white/20 shadow-2xl space-y-4"
+          >
             <button
               onClick={() => setActiveMediaModal(null)}
               className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full bg-white/10"
@@ -235,20 +253,15 @@ export default function SermonsHub() {
             </div>
 
             {/* Video Player Frame */}
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/10 flex items-center justify-center">
-              <div className="text-center p-6 space-y-3">
-                <Play className="w-16 h-16 text-[#38BDF8] mx-auto animate-pulse" />
-                <div className="text-sm font-bold text-white">Gospel Inn Ministry Media Stream</div>
-                <p className="text-xs text-slate-400 max-w-md mx-auto">
-                  Playing: {activeMediaModal.title}. Connect with our live sermon channel on YouTube and Mixlr during service times.
-                </p>
-                <button
-                  onClick={() => alert("Redirecting to Gospel Inn Youtube Channel Stream...")}
-                  className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#6E0A1A] border border-[#38BDF8]/40"
-                >
-                  Open Live Channel
-                </button>
-              </div>
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/10">
+              <iframe
+                src={activeMediaModal.videoUrl}
+                title={activeMediaModal.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
             </div>
           </div>
         </div>

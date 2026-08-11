@@ -5,20 +5,38 @@ import Image from "next/image";
 import { Play, Calendar, ShieldCheck, Flame, Clock } from "lucide-react";
 
 export default function Hero() {
-  // Live service countdown calculation
-  const [timeLeft, setTimeLeft] = useState({ hours: 14, minutes: 35, seconds: 20 });
+  const getNextEncounter = () => {
+    const now = new Date();
+    const target = new Date(now);
+    const diff = (4 - now.getDay() + 7) % 7;
+    target.setDate(now.getDate() + diff);
+    target.setHours(16, 0, 0, 0);
+    return target.getTime() <= now.getTime()
+      ? target.getTime() + 7 * 86400000
+      : target.getTime();
+  };
+
+  const [target, setTarget] = useState(getNextEncounter);
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: 59, seconds: 59 };
-        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        return { hours: 24, minutes: 0, seconds: 0 };
+    const tick = () => {
+      const remaining = Math.max(0, target - Date.now());
+      if (remaining === 0) {
+        setTarget(getNextEncounter());
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      setTimeLeft({
+        hours: Math.floor(remaining / 3.6e6),
+        minutes: Math.floor((remaining % 3.6e6) / 6e4),
+        seconds: Math.floor((remaining % 6e4) / 1e3),
       });
-    }, 1000);
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [target]);
 
   return (
     <section id="hero" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-[#0B1120]">
@@ -136,6 +154,7 @@ export default function Hero() {
                     src="/images/worship.png"
                     alt="Gospel Inn Ministry Worship Service"
                     fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
                     priority
                     className="object-cover object-center transform hover:scale-105 transition-transform duration-700"
                   />
