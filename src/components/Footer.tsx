@@ -104,7 +104,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-xs text-slate-300">
               <li><a href="#conferences" className="hover:text-white transition-colors">Strategic Leadership</a></li>
-              <li><a href="#conferences" className="hover:text-white transition-colors">STRASODA Gathering</a></li>
+              <li><a href="#conferences" className="hover:text-white transition-colors">Strategic Sons &amp; Daughters</a></li>
               <li><a href="#conferences" className="hover:text-white transition-colors">Alabaster Women</a></li>
               <li><a href="#conferences" className="hover:text-white transition-colors">MELEC Men&apos;s Summit</a></li>
               <li><a href="#conferences" className="hover:text-white transition-colors">FELISO Worship Fest</a></li>
