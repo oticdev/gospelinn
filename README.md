@@ -103,7 +103,7 @@ src/
   NEXT_PUBLIC_PREACHING_FORM_ENDPOINT=https://your-script.googleapps.com/exec
   ```
 
-  If unset, the form falls back to a `mailto:info@gospelinnministry.org` email.
+  If unset, the form falls back to a `mailto:office@gospelinnministries.com` email.
 
 ## Customization
 

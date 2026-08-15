@@ -94,7 +94,7 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
           data.message,
         ].join("\n")
       );
-      window.location.href = `mailto:info@gospelinnministry.org?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:office@gospelinnministries.com?subject=${subject}&body=${body}`;
     }
     setSubmitting(false);
     setSubmitted(true);

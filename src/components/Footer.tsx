@@ -128,7 +128,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-gim-skyblue-bright shrink-0" />
-                <span>info@gospelinnministry.org</span>
+                <span>office@gospelinnministries.com</span>
               </div>
             </div>
           </div>
