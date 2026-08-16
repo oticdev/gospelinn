@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Play, Calendar, ShieldCheck, Flame, Clock } from "lucide-react";
+import { Play, Calendar, Flame, Clock } from "lucide-react";
 
 export default function Hero() {
   const getNextEncounter = () => {
@@ -160,13 +160,7 @@ export default function Hero() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gim-dark via-gim-dark/40 to-transparent"></div>
 
-                  {/* Floating Overlay Badge 1 */}
-                  <div className="absolute top-4 left-4 glass-panel-oxblood px-3 py-2 rounded-xl flex items-center gap-2 border border-gim-oxblood">
-                    <ShieldCheck className="w-4 h-4 text-gim-skyblue-bright" />
-                    <span className="text-xs font-semibold text-white">Pastor Ameh Amana</span>
-                  </div>
-
-                  {/* Floating Overlay Badge 2 */}
+                  {/* Floating Overlay Badge */}
                   <div className="absolute bottom-6 left-6 right-6 glass-panel p-4 rounded-2xl border border-white/10 text-left">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">

@@ -151,7 +151,7 @@ export default function WeeklySchedule() {
       `RRULE:${rrule}`,
       `SUMMARY:Gospel Inn Ministry — ${service.name}`,
       `DESCRIPTION:${service.description}`,
-      "LOCATION:Gospel Inn Ministry Cathedral, Main Sanctuary",
+      "LOCATION:Gospel Inn Ministry, Main Sanctuary",
       "BEGIN:VALARM",
       "ACTION:DISPLAY",
       "TRIGGER:-PT30M",
@@ -317,7 +317,9 @@ export default function WeeklySchedule() {
             </p>
           </div>
           <a
-            href="#contact"
+            href="https://maps.app.goo.gl/vLX8Gg7AwmP1Gpsj9?g_st=aw"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 shadow-md shrink-0"
           >
             Plan Your Visit
