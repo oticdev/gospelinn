@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const CHANNEL_HANDLE = process.env.YOUTUBE_CHANNEL_HANDLE;
 
+const REVALIDATE = 3 * 24 * 60 * 60; // 3 days
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const maxResults = searchParams.get("max") || "9";
@@ -17,7 +19,8 @@ export async function GET(request: Request) {
   try {
     // Step 1: Get the uploads playlist ID from the channel handle
     const channelRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=${CHANNEL_HANDLE}&key=${API_KEY}`
+      `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=${CHANNEL_HANDLE}&key=${API_KEY}`,
+      { next: { revalidate: REVALIDATE } }
     );
     const channelData = await channelRes.json();
 
@@ -30,7 +33,8 @@ export async function GET(request: Request) {
 
     // Step 2: Fetch latest videos from the uploads playlist
     const playlistRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${uploadsPlaylistId}&maxResults=${maxResults}&key=${API_KEY}`
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${uploadsPlaylistId}&maxResults=${maxResults}&key=${API_KEY}`,
+      { next: { revalidate: REVALIDATE } }
     );
     const playlistData = await playlistRes.json();
 
@@ -44,7 +48,8 @@ export async function GET(request: Request) {
       .join(",");
 
     const detailsRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${videoIds}&key=${API_KEY}`
+      `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${videoIds}&key=${API_KEY}`,
+      { next: { revalidate: REVALIDATE } }
     );
     const detailsData = await detailsRes.json();
 
@@ -85,7 +90,14 @@ export async function GET(request: Request) {
       }
     );
 
-    return NextResponse.json({ videos });
+    return NextResponse.json(
+      { videos },
+      {
+        headers: {
+          "Cache-Control": `public, s-maxage=${REVALIDATE}, stale-while-revalidate=${REVALIDATE}`,
+        },
+      }
+    );
   } catch (error) {
     console.error("YouTube API error:", error);
     return NextResponse.json(

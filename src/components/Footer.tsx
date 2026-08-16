@@ -75,7 +75,7 @@ export default function Footer() {
             <div className="space-y-2.5 text-xs text-slate-300">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-gim-oxblood shrink-0 mt-0.5" />
-                <span>Gospel Inn Ministry Cathedral, Main Sanctuary</span>
+                <span>Gospel Inn Ministry, Main Sanctuary</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-gim-skyblue-bright shrink-0" />

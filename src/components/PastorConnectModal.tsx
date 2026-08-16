@@ -71,7 +71,25 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const formData = new FormData(form);
+
+    const data: Record<string, string> = {};
+    formData.forEach((value, key) => {
+      if (key !== "flyer") data[key] = String(value);
+    });
+
+    // Convert flyer to base64 if present
+    const flyerFile = formData.get("flyer") as File | null;
+    if (flyerFile && flyerFile.size > 0) {
+      const reader = new FileReader();
+      const flyerDataUrl = await new Promise<string>((resolve) => {
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(flyerFile);
+      });
+      data.flyerName = flyerFile.name;
+      data.flyerType = flyerFile.type;
+      data.flyerBase64 = flyerDataUrl;
+    }
 
     setSubmitting(true);
     setSubmitError(false);
@@ -102,7 +120,14 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
           ``,
           `Message:`,
           data.message,
-        ].join("\n")
+          ``,
+          `Ministry Brief:`,
+          data.ministryBrief || "—",
+          ``,
+          data.flyerName ? `Flyer attached: ${data.flyerName}` : "",
+        ]
+          .filter(Boolean)
+          .join("\n")
       );
       window.location.href = `mailto:office@gospelinnministries.com?subject=${subject}&body=${body}`;
     }
@@ -240,6 +265,21 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
                   rows={3}
                   className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
                 ></textarea>
+                <textarea
+                  name="ministryBrief"
+                  placeholder="Write a short brief on your ministry..."
+                  rows={3}
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
+                ></textarea>
+                <div>
+                  <label className="block text-[11px] text-slate-400 font-medium mb-1.5">Event Flyer (optional)</label>
+                  <input
+                    name="flyer"
+                    type="file"
+                    accept="image/*,.pdf"
+                    className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:text-white file:bg-gim-oxblood/60 hover:file:bg-gim-oxblood file:cursor-pointer"
+                  />
+                </div>
                 {submitError && (
                   <p role="alert" className="text-xs text-red-400 font-semibold">
                     Sorry, your request could not be sent right now. Please try again, or email us directly at info@gospelinnministry.org.
