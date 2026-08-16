@@ -1,12 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Quote, BookOpen, Sparkles, Award, UserPlus } from "lucide-react";
 import PastorConnectModal from "./PastorConnectModal";
 
+const PHOTOS = [
+  { src: "/images/daddyAmeh.jpeg", alt: "Lead Pastor Ameh Amana - Gospel Inn Ministry" },
+  { src: "/images/amehamana1.jpg", alt: "Pastor Ameh Amana - Gospel Inn Ministry" },
+  { src: "/images/amehamana3.jpg", alt: "Pastor Ameh Amana - Gospel Inn Ministry" },
+  { src: "/images/amehamana4.jpg", alt: "Pastor Ameh Amana - Gospel Inn Ministry" },
+  { src: "/images/amehamana5.jpg", alt: "Pastor Ameh Amana - Gospel Inn Ministry" },
+  { src: "/images/amehamana6.jpg", alt: "Pastor Ameh Amana - Gospel Inn Ministry" },
+];
+
 export default function PastorSpotlight() {
   const [connectOpen, setConnectOpen] = useState(false);
+  const [current, setCurrent] = useState(0);
+
+  const next = useCallback(() => {
+    setCurrent((i) => (i + 1) % PHOTOS.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(next, 4000);
+    return () => clearInterval(timer);
+  }, [next]);
   return (
     <section id="pastor" className="py-24 bg-slate-900 relative overflow-hidden">
       {/* Decorative Glows */}
@@ -52,13 +71,18 @@ export default function PastorSpotlight() {
                 className="relative rounded-3xl overflow-hidden glass-panel border border-white/15 shadow-2xl cursor-pointer group/connect hover:border-gim-skyblue-bright/50 transition-colors"
               >
                 <div className="relative h-[480px] w-full">
-                  <Image
-                    src="/images/daddyAmeh.jpeg"
-                    alt="Lead Pastor Ameh Amana - Gospel Inn Ministry"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 42vw"
-                    className="object-cover object-top group-hover/connect:scale-105 transition-transform duration-700"
-                  />
+                  {PHOTOS.map((photo, i) => (
+                    <Image
+                      key={photo.src}
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 42vw"
+                      className={`object-cover object-top absolute inset-0 transition-opacity duration-700 ${
+                        i === current ? "opacity-100" : "opacity-0"
+                      }`}
+                    />
+                  ))}
                   <div className="absolute inset-0 bg-gradient-to-t from-gim-dark via-transparent to-transparent"></div>
 
                   {/* Connect Hint */}
