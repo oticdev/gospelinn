@@ -1,19 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Logo from "./Logo";
 import SocialLinks from "./SocialLinks";
-import { Mail, Phone, MapPin, Send, Sparkles, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubscribed(true);
-    setTimeout(() => setSubscribed(false), 3000);
-  };
-
   return (
     <footer id="contact" className="bg-gim-dark border-t border-white/10 pt-16 pb-12 relative overflow-hidden text-left">
       {/* Background glow */}
@@ -21,43 +13,6 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Top Section: Newsletter Card */}
-        <div className="glass-panel-oxblood p-8 rounded-3xl border border-gim-oxblood mb-16 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center md:text-left">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2 justify-center md:justify-start">
-              <Sparkles className="w-5 h-5 text-gim-skyblue-bright" />
-              Subscribe to GIM Daily Devotional & Updates
-            </h3>
-            <p className="text-xs text-slate-300 font-light">
-              Receive weekly sermon notes, prayer points, and event announcements directly in your inbox.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubscribe} className="flex items-center gap-2 w-full md:w-auto">
-            {subscribed ? (
-              <div className="px-4 py-2.5 rounded-xl bg-gim-skyblue/20 border border-gim-skyblue-bright text-xs text-white font-bold flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-gim-skyblue-bright" /> Subscribed Successfully!
-              </div>
-            ) : (
-              <>
-                <input
-                  required
-                  type="email"
-                  placeholder="Enter email address..."
-                  className="px-4 py-2.5 rounded-xl bg-black/50 border border-white/20 text-white text-xs focus:outline-none focus:border-gim-skyblue-bright w-full md:w-64"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 shadow-md shrink-0 flex items-center gap-1.5"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  Join
-                </button>
-              </>
-            )}
-          </form>
-        </div>
-
         {/* Footer Navigation Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/10">
           
