@@ -151,9 +151,17 @@ export default function PastorSpotlight() {
 
             {/* Action Bar */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                type="button"
+                onClick={() => setConnectOpen(true)}
+                className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 shadow-lg hover:shadow-gim-skyblue-bright/20 transition-all flex items-center gap-2"
+              >
+                <UserPlus className="w-4 h-4 text-gim-skyblue-bright" />
+                Invite Pastor Ameh Amana
+              </button>
               <a
                 href="#schedule"
-                className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 shadow-lg hover:shadow-gim-skyblue-bright/20 transition-all"
+                className="px-6 py-3 rounded-xl font-semibold text-xs text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-all"
               >
                 View Full Weekly Schedule
               </a>

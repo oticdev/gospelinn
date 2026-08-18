@@ -24,7 +24,8 @@ interface PastorConnectModalProps {
 export default function PastorConnectModal({ isOpen = true, onClose }: PastorConnectModalProps) {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -68,31 +69,81 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
     },
   ];
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setSubmitError("Flyer file size exceeds 5MB limit. Please attach a smaller image or PDF.");
+        setSelectedFile(null);
+        e.target.value = "";
+        return;
+      }
+      setSubmitError(null);
+      setSelectedFile(file);
+    } else {
+      setSelectedFile(null);
+    }
+  };
+
+  const clearSelectedFile = () => {
+    setSelectedFile(null);
+    const input = document.getElementById("flyer-input") as HTMLInputElement | null;
+    if (input) input.value = "";
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSubmitting(true);
+    setSubmitError(null);
+
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    const flyerFile = selectedFile || (formData.get("flyer") as File | null);
+    if (flyerFile && flyerFile.size > 5 * 1024 * 1024) {
+      setSubmitError("Flyer file size exceeds 5MB limit. Please attach a smaller image or PDF.");
+      setSubmitting(false);
+      return;
+    }
 
     const data: Record<string, string> = {};
     formData.forEach((value, key) => {
       if (key !== "flyer") data[key] = String(value);
     });
 
-    // Convert flyer to base64 if present
-    const flyerFile = formData.get("flyer") as File | null;
+    const aboutEventVal = String(formData.get("aboutEvent") || formData.get("message") || "");
+    const aboutMinistryVal = String(formData.get("aboutMinistry") || formData.get("ministryBrief") || "");
+
+    // Set normalized key variations for Google Apps Script / Sheet header compatibility
+    data.aboutEvent = aboutEventVal;
+    data.message = aboutEventVal;
+    data.eventDetails = aboutEventVal;
+
+    data.aboutMinistry = aboutMinistryVal;
+    data.ministryBrief = aboutMinistryVal;
+
+    // Convert flyer to base64 if present and safely include all alias keys
     if (flyerFile && flyerFile.size > 0) {
-      const reader = new FileReader();
-      const flyerDataUrl = await new Promise<string>((resolve) => {
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(flyerFile);
-      });
-      data.flyerName = flyerFile.name;
-      data.flyerType = flyerFile.type;
-      data.flyerBase64 = flyerDataUrl;
+      try {
+        const flyerDataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = (err) => reject(err);
+          reader.readAsDataURL(flyerFile);
+        });
+
+        data.flyer = flyerDataUrl;
+        data.flyerBase64 = flyerDataUrl;
+        data.flyer_base64 = flyerDataUrl;
+        data.flyerName = flyerFile.name;
+        data.flyerType = flyerFile.type;
+      } catch {
+        setSubmitError("Could not process the flyer file. Please try selecting the file again.");
+        setSubmitting(false);
+        return;
+      }
     }
 
-    setSubmitting(true);
-    setSubmitError(false);
     if (PREACHING_FORM_ENDPOINT) {
       try {
         await fetch(PREACHING_FORM_ENDPOINT, {
@@ -104,7 +155,7 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
         });
       } catch {
         setSubmitting(false);
-        setSubmitError(true);
+        setSubmitError("Sorry, your request could not be sent right now. Please try again, or email us directly at office@gospelinnministries.com.");
         return;
       }
     } else {
@@ -118,11 +169,11 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
           `Event Date: ${data.eventDate || "—"}`,
           `Location: ${data.location || "—"}`,
           ``,
-          `Message:`,
-          data.message,
+          `About Event:`,
+          data.aboutEvent || "—",
           ``,
-          `Ministry Brief:`,
-          data.ministryBrief || "—",
+          `About Ministry:`,
+          data.aboutMinistry || "—",
           ``,
           data.flyerName ? `Flyer attached: ${data.flyerName}` : "",
         ]
@@ -220,69 +271,137 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
               </p>
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
-                    required
-                    name="name"
-                    type="text"
-                    placeholder="Full Name"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
-                  />
-                  <input
-                    required
-                    name="email"
-                    type="email"
-                    placeholder="Email Address"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
-                  />
-                  <input
-                    name="phone"
-                    type="tel"
-                    placeholder="Phone (Optional)"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
-                  />
-                  <input
-                    name="organization"
-                    type="text"
-                    placeholder="Church / Organization"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
-                  />
-                  <input
-                    name="eventDate"
-                    type="date"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
-                  />
-                  <input
-                    name="location"
-                    type="text"
-                    placeholder="Event Location"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
-                  />
+                  <div>
+                    <label htmlFor="name-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                      Full Name <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      required
+                      id="name-input"
+                      name="name"
+                      type="text"
+                      placeholder="e.g. Pastor John Doe"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                      Email Address <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      required
+                      id="email-input"
+                      name="email"
+                      type="email"
+                      placeholder="e.g. john@example.com"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                      Phone (Optional)
+                    </label>
+                    <input
+                      id="phone-input"
+                      name="phone"
+                      type="tel"
+                      placeholder="+234 ..."
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="org-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                      Church / Organization
+                    </label>
+                    <input
+                      id="org-input"
+                      name="organization"
+                      type="text"
+                      placeholder="Church or Organization Name"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="date-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                      Proposed Event Date
+                    </label>
+                    <input
+                      id="date-input"
+                      name="eventDate"
+                      type="date"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="location-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                      Event Location / City
+                    </label>
+                    <input
+                      id="location-input"
+                      name="location"
+                      type="text"
+                      placeholder="City, State / Country"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
+                    />
+                  </div>
                 </div>
-                <textarea
-                  required
-                  name="message"
-                  placeholder="Tell us about your event..."
-                  rows={3}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
-                ></textarea>
-                <textarea
-                  name="ministryBrief"
-                  placeholder="Write a short brief on your ministry..."
-                  rows={3}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
-                ></textarea>
+
                 <div>
-                  <label className="block text-[11px] text-slate-400 font-medium mb-1.5">Event Flyer (optional)</label>
+                  <label htmlFor="about-event-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                    About the Event <span className="text-red-400">*</span>
+                  </label>
+                  <textarea
+                    required
+                    id="about-event-input"
+                    name="aboutEvent"
+                    placeholder="Tell us about your event (theme, expected audience, format, schedule)..."
+                    rows={3}
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label htmlFor="about-ministry-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                    About Your Ministry / Organization (Optional)
+                  </label>
+                  <textarea
+                    id="about-ministry-input"
+                    name="aboutMinistry"
+                    placeholder="Write a short background on your ministry or organization..."
+                    rows={3}
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label htmlFor="flyer-input" className="block text-[11px] text-slate-300 font-medium mb-1">
+                    Event Flyer (Optional, max 5MB)
+                  </label>
                   <input
+                    id="flyer-input"
                     name="flyer"
                     type="file"
                     accept="image/*,.pdf"
+                    onChange={handleFileChange}
                     className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:text-white file:bg-gim-oxblood/60 hover:file:bg-gim-oxblood file:cursor-pointer"
                   />
+                  {selectedFile && (
+                    <div className="mt-1.5 flex items-center justify-between text-xs text-gim-skyblue-bright bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
+                      <span className="truncate">Selected: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(0)} KB)</span>
+                      <button
+                        type="button"
+                        onClick={clearSelectedFile}
+                        className="text-slate-400 hover:text-white ml-2 text-xs font-semibold"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
                 </div>
+
                 {submitError && (
-                  <p role="alert" className="text-xs text-red-400 font-semibold">
-                    Sorry, your request could not be sent right now. Please try again, or email us directly at info@gospelinnministry.org.
+                  <p role="alert" className="text-xs text-red-400 font-semibold bg-red-950/40 p-2.5 rounded-xl border border-red-800/40">
+                    {submitError}
                   </p>
                 )}
                 <button
