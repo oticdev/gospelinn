@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   X,
   ThumbsUp,
@@ -10,33 +10,81 @@ import {
   User,
   Send,
   CheckCircle2,
+  MessageCircle,
 } from "lucide-react";
 
-const PREACHING_FORM_ENDPOINT =
-  process.env.NEXT_PUBLIC_PREACHING_FORM_ENDPOINT ||
-  "https://script.google.com/macros/s/AKfycbz6HNpdi7GuoUUdeGSHmJftKzshxqHbFveEf_hgBKOQ_vl_HBfYwvMJ8Yo6FGQneEPA/exec";
+const OFFICE_EMAIL = "office@gospelinnministries.com";
+const OFFICE_WHATSAPP = "https://wa.link/nnxxg3";
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 interface PastorConnectModalProps {
-  isOpen?: boolean;
   onClose: () => void;
 }
 
-export default function PastorConnectModal({ isOpen = true, onClose }: PastorConnectModalProps) {
+export default function PastorConnectModal({ onClose }: PastorConnectModalProps) {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [usedEmailFallback, setUsedEmailFallback] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [flyerWarning, setFlyerWarning] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const autoCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const dialog = dialogRef.current;
 
-  if (!isOpen) return null;
+    const getFocusables = () =>
+      Array.from(
+        dialog?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([type="hidden"]), textarea, select'
+        ) ?? []
+      );
+
+    getFocusables()[0]?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab" || !dialog) return;
+      const focusables = getFocusables();
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !(active instanceof Node) || !dialog.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      previouslyFocused?.focus?.();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (autoCloseRef.current) clearTimeout(autoCloseRef.current);
+    };
+  }, []);
 
   const socialLinks = [
     {
@@ -71,18 +119,24 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setSubmitError("Flyer file size exceeds 5MB limit. Please attach a smaller image or PDF.");
-        setSelectedFile(null);
-        e.target.value = "";
-        return;
-      }
-      setSubmitError(null);
-      setSelectedFile(file);
-    } else {
+    if (!file) {
       setSelectedFile(null);
+      return;
     }
+    if (!file.type.startsWith("image/") && file.type !== "application/pdf") {
+      setSubmitError("Flyer must be an image or PDF file.");
+      setSelectedFile(null);
+      e.target.value = "";
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      setSubmitError("Flyer file size exceeds 5MB limit. Please attach a smaller image or PDF.");
+      setSelectedFile(null);
+      e.target.value = "";
+      return;
+    }
+    setSubmitError(null);
+    setSelectedFile(file);
   };
 
   const clearSelectedFile = () => {
@@ -91,103 +145,120 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
     if (input) input.value = "";
   };
 
+  const buildMailto = (data: Record<string, string>, flyerLink?: string) => {
+    const subject = encodeURIComponent(`Preaching Engagement Invitation — ${data.name}`);
+    const body = encodeURIComponent(
+      [
+        `Name: ${data.name}`,
+        `Email: ${data.email}`,
+        `Phone: ${data.phone || "—"}`,
+        `Church / Organization: ${data.organization || "—"}`,
+        `Event Date: ${data.eventDate || "—"}`,
+        `Location: ${data.location || "—"}`,
+        ``,
+        `About Event:`,
+        data.aboutEvent || "—",
+        ``,
+        `About Ministry:`,
+        data.aboutMinistry || "—",
+        ...(flyerLink ? [``, `Flyer: ${flyerLink}`] : []),
+      ].join("\n")
+    );
+    window.location.href = `mailto:${OFFICE_EMAIL}?subject=${subject}&body=${body}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setSubmitError(null);
+    setFlyerWarning(null);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    const flyerFile = selectedFile || (formData.get("flyer") as File | null);
-    if (flyerFile && flyerFile.size > 5 * 1024 * 1024) {
-      setSubmitError("Flyer file size exceeds 5MB limit. Please attach a smaller image or PDF.");
-      setSubmitting(false);
-      return;
-    }
-
     const data: Record<string, string> = {};
     formData.forEach((value, key) => {
-      if (key !== "flyer") data[key] = String(value);
+      if (typeof value === "string") data[key] = value.trim();
     });
 
-    const aboutEventVal = String(formData.get("aboutEvent") || formData.get("message") || "");
-    const aboutMinistryVal = String(formData.get("aboutMinistry") || formData.get("ministryBrief") || "");
-
-    // Set normalized key variations for Google Apps Script / Sheet header compatibility
-    data.aboutEvent = aboutEventVal;
-    data.message = aboutEventVal;
-    data.eventDetails = aboutEventVal;
-
-    data.aboutMinistry = aboutMinistryVal;
-    data.ministryBrief = aboutMinistryVal;
-
-    // Convert flyer to base64 if present and safely include all alias keys
-    if (flyerFile && flyerFile.size > 0) {
+    let flyerUrl: string | undefined;
+    if (selectedFile) {
       try {
-        const flyerDataUrl = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = (err) => reject(err);
-          reader.readAsDataURL(flyerFile);
-        });
-
-        data.flyer = flyerDataUrl;
-        data.flyerBase64 = flyerDataUrl;
-        data.flyer_base64 = flyerDataUrl;
-        data.flyerName = flyerFile.name;
-        data.flyerType = flyerFile.type;
-      } catch {
-        setSubmitError("Could not process the flyer file. Please try selecting the file again.");
-        setSubmitting(false);
-        return;
-      }
-    }
-
-    if (PREACHING_FORM_ENDPOINT) {
-      try {
-        await fetch(PREACHING_FORM_ENDPOINT, {
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", selectedFile);
+        const uploadRes = await fetch("/api/upload", {
           method: "POST",
-          mode: "no-cors",
-          redirect: "follow",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ ...data, submittedAt: new Date().toISOString() }),
+          body: uploadFormData,
         });
-      } catch {
+        if (uploadRes.ok) {
+          const uploadResult = await uploadRes.json();
+          flyerUrl = uploadResult.url;
+        } else {
+          setFlyerWarning("Flyer could not be uploaded — your request will be submitted without it.");
+          clearSelectedFile();
+        }
+      } catch (err) {
+        console.error("Flyer upload failed:", err);
+        setFlyerWarning("Flyer could not be uploaded — your request will be submitted without it.");
+        clearSelectedFile();
+      }
+    }
+
+    const payload: Record<string, string> = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      organization: data.organization,
+      eventDate: data.eventDate,
+      location: data.location,
+      aboutEvent: data.aboutEvent,
+      aboutMinistry: data.aboutMinistry,
+      website: data.website,
+    };
+    if (flyerUrl) {
+      payload.flyerUrl = flyerUrl;
+      payload.flyerName = selectedFile?.name ?? "";
+    }
+
+    let usedFallback = false;
+    try {
+      const res = await fetch("/api/preaching-invitation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.status === 501) {
+        buildMailto(data, flyerUrl);
+        usedFallback = true;
+      } else if (!res.ok) {
+        const result = await res.json().catch(() => null);
+        throw new Error(
+          result?.error ||
+            `Sorry, your request could not be sent right now. Please try again, or email us directly at ${OFFICE_EMAIL}.`
+        );
+      }
+    } catch (err) {
+      if (err instanceof TypeError) {
+        buildMailto(data, flyerUrl);
+        usedFallback = true;
+      } else {
+        setSubmitError(
+          err instanceof Error
+            ? err.message
+            : `Sorry, your request could not be sent right now. Please try again, or email us directly at ${OFFICE_EMAIL}.`
+        );
         setSubmitting(false);
-        setSubmitError("Sorry, your request could not be sent right now. Please try again, or email us directly at office@gospelinnministries.com.");
         return;
       }
-    } else {
-      const subject = encodeURIComponent(`Preaching Engagement Invitation — ${data.name}`);
-      const body = encodeURIComponent(
-        [
-          `Name: ${data.name}`,
-          `Email: ${data.email}`,
-          `Phone: ${data.phone || "—"}`,
-          `Church / Organization: ${data.organization || "—"}`,
-          `Event Date: ${data.eventDate || "—"}`,
-          `Location: ${data.location || "—"}`,
-          ``,
-          `About Event:`,
-          data.aboutEvent || "—",
-          ``,
-          `About Ministry:`,
-          data.aboutMinistry || "—",
-          ``,
-          data.flyerName ? `Flyer attached: ${data.flyerName}` : "",
-        ]
-          .filter(Boolean)
-          .join("\n")
-      );
-      window.location.href = `mailto:office@gospelinnministries.com?subject=${subject}&body=${body}`;
     }
+
+    setUsedEmailFallback(usedFallback);
     setSubmitting(false);
     setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+    autoCloseRef.current = setTimeout(() => {
       onClose();
-    }, 4000);
+    }, 12000);
   };
 
   return (
@@ -196,15 +267,17 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Connect & Invite the Pastor"
+        aria-labelledby="pastor-connect-title"
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-2xl rounded-3xl glass-panel p-6 sm:p-8 border border-white/20 shadow-2xl space-y-6 text-left max-h-[90vh] overflow-y-auto"
       >
         <button
           onClick={onClose}
           className="absolute top-5 right-5 p-2 text-slate-400 hover:text-white rounded-full bg-white/5"
+          aria-label="Close"
         >
           <X className="w-5 h-5" />
         </button>
@@ -212,12 +285,33 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
         {submitted ? (
           <div className="text-center py-10 space-y-3">
             <div className="w-16 h-16 rounded-full bg-gim-oxblood/50 border-2 border-gim-skyblue-bright flex items-center justify-center mx-auto text-gim-skyblue-bright">
-              <CheckCircle2 className="w-8 h-8" />
+              {usedEmailFallback ? <Send className="w-8 h-8" /> : <CheckCircle2 className="w-8 h-8" />}
             </div>
-            <h3 className="text-2xl font-bold text-white">Request Received!</h3>
+            <h3 className="text-2xl font-bold text-white">
+              {usedEmailFallback ? "Almost Done!" : "Request Received!"}
+            </h3>
             <p className="text-xs text-slate-300 max-w-sm mx-auto">
-              Thank you for your invitation. Pastor Ameh Amana&apos;s office will contact you shortly.
+              {usedEmailFallback
+                ? "Your email app has opened with a pre-filled request — please press send to complete your invitation."
+                : "Thank you for your invitation. Pastor Ameh Amana's office will contact you shortly."}
             </p>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+              Haven&apos;t heard back on time? You can message the Gospel Inn office directly on WhatsApp.
+            </p>
+            <a
+              href={OFFICE_WHATSAPP}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/15 hover:border-emerald-400/60 hover:bg-emerald-950/30 text-xs font-bold text-white transition-all"
+            >
+              <MessageCircle className="w-4 h-4 text-emerald-400" />
+              Message the Office on WhatsApp
+            </a>
+            {flyerWarning && (
+              <p role="status" className="text-xs text-amber-400 max-w-sm mx-auto">
+                Note: {flyerWarning}
+              </p>
+            )}
           </div>
         ) : (
           <>
@@ -227,7 +321,9 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
                 <User className="w-3.5 h-3.5" />
                 Pastor Ameh Amana
               </div>
-              <h3 className="text-2xl font-black text-white">Connect &amp; Invite the Pastor</h3>
+              <h3 id="pastor-connect-title" className="text-2xl font-black text-white">
+                Connect &amp; Invite the Pastor
+              </h3>
               <p className="text-xs text-slate-300">
                 Follow Pastor Ameh Amana on social media or request him for a preaching engagement at your event.
               </p>
@@ -236,7 +332,7 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
             {/* Social Handles */}
             <div>
               <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Social Media</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                 {socialLinks.map((s) => {
                   const IconComp = s.icon;
                   return (
@@ -270,6 +366,14 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
                 Invite Pastor Ameh Amana to minister at your church, conference, or event.
               </p>
               <form onSubmit={handleSubmit} className="space-y-3">
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="hidden"
+                />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label htmlFor="name-input" className="block text-[11px] text-slate-300 font-medium mb-1">
@@ -329,6 +433,7 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
                       id="date-input"
                       name="eventDate"
                       type="date"
+                      min={new Date().toISOString().split("T")[0]}
                       className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright"
                     />
                   </div>
@@ -356,6 +461,7 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
                     name="aboutEvent"
                     placeholder="Tell us about your event (theme, expected audience, format, schedule)..."
                     rows={3}
+                    maxLength={5000}
                     className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
                   ></textarea>
                 </div>
@@ -369,6 +475,7 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
                     name="aboutMinistry"
                     placeholder="Write a short background on your ministry or organization..."
                     rows={3}
+                    maxLength={5000}
                     className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white text-sm focus:outline-none focus:border-gim-skyblue-bright resize-none"
                   ></textarea>
                 </div>
@@ -399,9 +506,16 @@ export default function PastorConnectModal({ isOpen = true, onClose }: PastorCon
                   )}
                 </div>
 
-                {submitError && (
-                  <p role="alert" className="text-xs text-red-400 font-semibold bg-red-950/40 p-2.5 rounded-xl border border-red-800/40">
-                    {submitError}
+                {(submitError || flyerWarning) && (
+                  <p
+                    role="alert"
+                    className={`text-xs font-semibold p-2.5 rounded-xl border ${
+                      submitError
+                        ? "text-red-400 bg-red-950/40 border-red-800/40"
+                        : "text-amber-400 bg-amber-950/30 border-amber-800/40"
+                    }`}
+                  >
+                    {submitError || flyerWarning}
                   </p>
                 )}
                 <button
