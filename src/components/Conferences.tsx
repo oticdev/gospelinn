@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sparkles, Users, Award, Shield, Music, Flame, HeartHandshake, ChevronRight, X, Phone, type LucideIcon } from "lucide-react";
+import { Sparkles, Users, Award, Shield, Music, Flame, HeartHandshake, ChevronRight, X, Phone, MessageCircle, ClipboardList, type LucideIcon } from "lucide-react";
+
+const OFFICE_WHATSAPP = "https://wa.link/nnxxg3";
 
 interface Conference {
   id: string;
@@ -13,6 +15,8 @@ interface Conference {
   icon: LucideIcon;
   color: "oxblood" | "skyblue" | "gold";
   season: string;
+  whatsappLink?: string;
+  registrationForm?: string;
 }
 
 export default function Conferences() {
@@ -62,6 +66,9 @@ export default function Conferences() {
       icon: Award,
       color: "skyblue",
       season: "Men's Summit",
+      whatsappLink: "https://wa.link/verjtq",
+      registrationForm:
+        "https://docs.google.com/forms/d/e/1FAIpQLSfET1a3Apy6T47M65flrhJtFAyuVxwacsx9Z2bg1pgz2X52Ig/viewform",
     },
     {
       id: "feliso",
@@ -111,7 +118,7 @@ export default function Conferences() {
     <section id="conferences" className="py-24 bg-slate-900 relative overflow-hidden">
       {/* Background Orbs */}
       <div className="absolute top-1/3 left-0 w-96 h-96 bg-gim-oxblood/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gim-skyblue-bright/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-125 h-125 bg-gim-skyblue-bright/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -177,7 +184,7 @@ export default function Conferences() {
                   <span className="text-xs text-slate-400">Gospel Inn Ministry</span>
                   <button
                     onClick={() => setSelectedConference(conf)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover hover:from-gim-oxblood-hover hover:to-gim-oxblood border border-gim-skyblue-bright/30 flex items-center gap-1 transition-all"
+                    className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-linear-to-r from-gim-oxblood to-gim-oxblood-hover hover:from-gim-oxblood-hover hover:to-gim-oxblood border border-gim-skyblue-bright/30 flex items-center gap-1 transition-all"
                   >
                     <span>Register / Info</span>
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -228,20 +235,65 @@ export default function Conferences() {
               {selectedConference.description}
             </p>
 
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-gim-oxblood/40 to-gim-dark border border-gim-oxblood space-y-2">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-gim-oxblood/40 to-gim-dark border border-gim-oxblood space-y-3">
               <div className="text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">
                 Registration &amp; Details
               </div>
-              <p className="text-xs text-slate-300 font-light">
-                To register or find out more about this gathering, call or WhatsApp the ministry office.
-              </p>
-              <a
-                href="tel:09127462401"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 transition-all hover:shadow-gim-skyblue-bright/20"
-              >
-                <Phone className="w-3.5 h-3.5 text-gim-skyblue-bright" />
-                0912 746 2401
-              </a>
+              {selectedConference.registrationForm || selectedConference.whatsappLink ? (
+                <>
+                  <p className="text-xs text-slate-300 font-light">
+                    Secure your spot for {selectedConference.acronym || selectedConference.title} — register online or reach out directly.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedConference.registrationForm && (
+                      <a
+                        href={selectedConference.registrationForm}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 transition-all hover:shadow-gim-skyblue-bright/20"
+                      >
+                        <ClipboardList className="w-3.5 h-3.5 text-gim-skyblue-bright" />
+                        Register via Google Form
+                      </a>
+                    )}
+                    {selectedConference.whatsappLink && (
+                      <a
+                        href={selectedConference.whatsappLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-emerald-800/60 border border-emerald-500/40 transition-all hover:bg-emerald-700/60"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                        Register via WhatsApp
+                      </a>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs text-slate-300 font-light">
+                    To register or find out more about this gathering, call or message the ministry office.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <a
+                      href="tel:09127462401"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 transition-all hover:shadow-gim-skyblue-bright/20"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-gim-skyblue-bright" />
+                      0912 746 2401
+                    </a>
+                    <a
+                      href={OFFICE_WHATSAPP}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-emerald-800/60 border border-emerald-500/40 transition-all hover:bg-emerald-700/60"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                      Office WhatsApp
+                    </a>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
