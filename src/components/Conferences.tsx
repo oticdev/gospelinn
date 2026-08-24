@@ -129,7 +129,7 @@ export default function Conferences() {
             Kingdom Impact Conventions
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-            Flagship <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gim-skyblue-light to-gim-skyblue-bright">Conferences & Outreaches</span>
+            Flagship <span className="text-transparent bg-clip-text bg-linear-to-r from-white via-gim-skyblue-light to-gim-skyblue-bright">Conferences & Outreaches</span>
           </h2>
           <p className="text-slate-300 text-base font-light">
             Empowering every demographic—Leaders, Men, Women, Youth, and Children—under God&apos;s holy altar.
@@ -235,7 +235,7 @@ export default function Conferences() {
               {selectedConference.description}
             </p>
 
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-gim-oxblood/40 to-gim-dark border border-gim-oxblood space-y-3">
+            <div className="p-4 rounded-2xl bg-linear-to-br from-gim-oxblood/40 to-gim-dark border border-gim-oxblood space-y-3">
               <div className="text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">
                 Registration &amp; Details
               </div>
@@ -250,7 +250,7 @@ export default function Conferences() {
                         href={selectedConference.registrationForm}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 transition-all hover:shadow-gim-skyblue-bright/20"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-linear-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 transition-all hover:shadow-gim-skyblue-bright/20"
                       >
                         <ClipboardList className="w-3.5 h-3.5 text-gim-skyblue-bright" />
                         Register via Google Form
@@ -277,7 +277,7 @@ export default function Conferences() {
                   <div className="flex flex-wrap gap-2">
                     <a
                       href="tel:09127462401"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 transition-all hover:shadow-gim-skyblue-bright/20"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs text-white bg-linear-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 transition-all hover:shadow-gim-skyblue-bright/20"
                     >
                       <Phone className="w-3.5 h-3.5 text-gim-skyblue-bright" />
                       0912 746 2401
