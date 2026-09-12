@@ -153,6 +153,23 @@ export async function POST(request: Request) {
         { status: 502 }
       );
     }
+
+    // Apps Script returns HTTP 200 even when doPost() throws; it reports the
+    // failure in the body as { status: "error", message }.
+    const text = await res.text().catch(() => "");
+    let scriptStatus: unknown;
+    try {
+      scriptStatus = JSON.parse(text)?.status;
+    } catch {
+      // Non-JSON body (e.g. an HTML error page) — treat as success only if 2xx, which it is.
+    }
+    if (scriptStatus === "error") {
+      console.error("Preaching form script error:", text.slice(0, 300));
+      return NextResponse.json(
+        { error: "The receiving endpoint could not save the submission." },
+        { status: 502 }
+      );
+    }
   } catch (error) {
     if (error instanceof Error && error.name === "TimeoutError") {
       return NextResponse.json({ error: "Submission timed out." }, { status: 504 });
