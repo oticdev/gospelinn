@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { guardPublicPost } from "@/lib/request-guards";
 
+// Google Apps Script web apps can take 15-30 s on a cold start. Give the
+// forward enough room, and tell Vercel the function may run that long.
+export const maxDuration = 60;
+const FORWARD_TIMEOUT_MS = 45_000;
+
 const FIELD_LIMITS: Record<string, number> = {
   name: 200,
   email: 320,
@@ -16,6 +21,16 @@ const FIELD_LIMITS: Record<string, number> = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * Google Sheets parses a cell that starts with = + - @ (or a tab/CR) as a
+ * formula, which turns "+234 …" phone numbers into #ERROR! and lets a
+ * malicious "name" run a formula in the office's sheet. A leading apostrophe
+ * forces text and is not displayed.
+ */
+function sheetSafe(value: string): string {
+  return /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+}
 
 /** Only accept flyer links that point at our own Cloudinary account. */
 function isTrustedFlyerUrl(url: string): boolean {
@@ -54,7 +69,7 @@ export async function POST(request: Request) {
     const value = body[key];
     if (typeof value !== "string") return "";
     const trimmed = value.trim();
-    return trimmed.slice(0, FIELD_LIMITS[key] ?? 1000);
+    return sheetSafe(trimmed.slice(0, FIELD_LIMITS[key] ?? 1000));
   };
 
   const name = str("name");
@@ -128,7 +143,7 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload),
       redirect: "follow",
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(FORWARD_TIMEOUT_MS),
     });
 
     if (!res.ok) {
