@@ -1,166 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Calendar, Clock, MapPin, Bell, Sparkles, Flame, CheckCircle2, Moon, Shield, type LucideIcon } from "lucide-react";
+import { SERVICES, type ServiceSchedule } from "@/lib/schedule";
+import { buildServiceIcs } from "@/lib/ics";
+import { SANCTUARY_MAPS_URL } from "@/lib/contact";
 
-interface ServiceEvent {
-  id: string;
-  name: string;
-  day: string;
-  time: string;
-  frequency: "Weekly" | "Monthly";
-  icon: LucideIcon;
-  description: string;
-  badge?: string;
-  color: "oxblood" | "skyblue";
-  weekday: number;
-  weekOfMonth?: number;
-  hour: number;
-  minute: number;
-  durationMinutes?: number;
-}
+const SERVICE_ICONS: Record<string, LucideIcon> = {
+  "prayer-school": Flame,
+  "discipleship-class": Shield,
+  "encounter-service": Sparkles,
+  "night-of-encounter": Moon,
+};
 
-const DAY_ABBR = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-const pad = (n: number) => String(n).padStart(2, "0");
-
-function nextWeekday(weekday: number, hour: number, minute: number): Date {
-  const now = new Date();
-  const diff = (weekday - now.getDay() + 7) % 7;
-  const target = new Date(now);
-  target.setDate(now.getDate() + diff);
-  target.setHours(hour, minute, 0, 0);
-  if (target <= now) target.setDate(target.getDate() + 7);
-  return target;
-}
-
-function nextNthWeekday(weekday: number, nth: number, hour: number, minute: number): Date {
-  const now = new Date();
-  for (let i = 0; i < 6; i++) {
-    const first = new Date(now.getFullYear(), now.getMonth() + i, 1);
-    const offset = (weekday - first.getDay() + 7) % 7;
-    const candidate = new Date(
-      now.getFullYear(),
-      now.getMonth() + i,
-      1 + offset + (nth - 1) * 7,
-      hour,
-      minute,
-      0,
-      0
-    );
-    if (candidate > now) return candidate;
-  }
-  return now;
-}
-
-function toIcsDate(d: Date): string {
-  return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
-}
-
-function toIcsStamp(d: Date): string {
-  return `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
-}
+const FILTERS = ["All", "Weekly", "Monthly"] as const;
+type Filter = (typeof FILTERS)[number];
 
 export default function WeeklySchedule() {
-  const [activeFilter, setActiveFilter] = useState<string>("All");
+  const [activeFilter, setActiveFilter] = useState<Filter>("All");
   const [reminderSaved, setReminderSaved] = useState<string | null>(null);
+  const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const services: ServiceEvent[] = [
-    {
-      id: "prayer-school",
-      name: "Prayer School",
-      day: "Every Monday",
-      time: "4:00 PM",
-      frequency: "Weekly",
-      icon: Flame,
-      description: "A consecrated atmosphere dedicated to intercession, spiritual warfare instruction, and building personal prayer endurance.",
-      badge: "Spiritual Growth",
-      color: "oxblood",
-      weekday: 1,
-      hour: 16,
-      minute: 0,
-      durationMinutes: 120,
-    },
-    {
-      id: "discipleship-class",
-      name: "Discipleship Class",
-      day: "Every Tuesday",
-      time: "4:00 PM",
-      frequency: "Weekly",
-      icon: Shield,
-      description: "In-depth exposition of biblical doctrines, Christian character formation, and personal spiritual growth under pastoral guidance.",
-      badge: "Foundational Doctrine",
-      color: "skyblue",
-      weekday: 2,
-      hour: 16,
-      minute: 0,
-      durationMinutes: 120,
-    },
-    {
-      id: "encounter-service",
-      name: "Encounter Service",
-      day: "Every Thursday",
-      time: "4:00 PM",
-      frequency: "Weekly",
-      icon: Sparkles,
-      description: "Mid-week divine visitation featuring explosive praise, prophetic ministry, healing, and word revelation.",
-      badge: "Prophetic & Power",
-      color: "oxblood",
-      weekday: 4,
-      hour: 16,
-      minute: 0,
-      durationMinutes: 120,
-    },
-    {
-      id: "night-of-encounter",
-      name: "Night of Encounter (Monthly Vigil)",
-      day: "3rd Friday of Every Month",
-      time: "9:00 PM",
-      frequency: "Monthly",
-      icon: Moon,
-      description: "All-night prayer vigil reserved for intense spiritual breakthroughs, deliverance, prophetic ministration, and divine encounters.",
-      badge: "Monthly All-Night Vigil",
-      color: "oxblood",
-      weekday: 5,
-      weekOfMonth: 3,
-      hour: 21,
-      minute: 0,
-      durationMinutes: 180,
-    },
-  ];
+  useEffect(() => {
+    return () => {
+      if (bannerTimer.current) clearTimeout(bannerTimer.current);
+    };
+  }, []);
 
-  const handleReminder = (service: ServiceEvent) => {
-    const start = service.weekOfMonth
-      ? nextNthWeekday(service.weekday, service.weekOfMonth, service.hour, service.minute)
-      : nextWeekday(service.weekday, service.hour, service.minute);
-    const end = new Date(start.getTime() + (service.durationMinutes ?? 120) * 60000);
-    const rrule = service.weekOfMonth
-      ? `FREQ=MONTHLY;BYDAY=${service.weekOfMonth}${DAY_ABBR[service.weekday]}`
-      : `FREQ=WEEKLY;BYDAY=${DAY_ABBR[service.weekday]}`;
-
-    const ics = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//Gospel Inn Ministry//GIM Calendar Reminder//EN",
-      "CALSCALE:GREGORIAN",
-      "METHOD:PUBLISH",
-      "BEGIN:VEVENT",
-      `UID:gim-${service.id}-${start.getTime()}@gospelinnministry.org`,
-      `DTSTAMP:${toIcsStamp(new Date())}`,
-      `DTSTART:${toIcsDate(start)}`,
-      `DTEND:${toIcsDate(end)}`,
-      `RRULE:${rrule}`,
-      `SUMMARY:Gospel Inn Ministry — ${service.name}`,
-      `DESCRIPTION:${service.description}`,
-      "LOCATION:Gospel Inn Ministry, Main Sanctuary",
-      "BEGIN:VALARM",
-      "ACTION:DISPLAY",
-      "TRIGGER:-PT30M",
-      `DESCRIPTION:Reminder for ${service.name}`,
-      "END:VALARM",
-      "END:VEVENT",
-      "END:VCALENDAR",
-    ].join("\r\n");
-
+  const handleReminder = (service: ServiceSchedule) => {
+    const ics = buildServiceIcs(service);
     const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -169,18 +37,17 @@ export default function WeeklySchedule() {
     document.body.appendChild(link);
     link.click();
     link.remove();
-    URL.revokeObjectURL(url);
+    // Safari can drop the download if the URL is revoked synchronously.
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
 
     setReminderSaved(service.name);
-    setTimeout(() => setReminderSaved(null), 3500);
+    if (bannerTimer.current) clearTimeout(bannerTimer.current);
+    bannerTimer.current = setTimeout(() => setReminderSaved(null), 3500);
   };
 
-  const filteredServices = services.filter((s) => {
-    if (activeFilter === "All") return true;
-    if (activeFilter === "Weekly") return s.frequency === "Weekly";
-    if (activeFilter === "Monthly") return s.frequency === "Monthly";
-    return true;
-  });
+  const filteredServices = SERVICES.filter(
+    (s) => activeFilter === "All" || s.frequency === activeFilter
+  );
 
   return (
     <section id="schedule" className="py-24 bg-gim-dark relative overflow-hidden">
@@ -201,31 +68,35 @@ export default function WeeklySchedule() {
             Schedule of <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gim-skyblue-light to-gim-skyblue-bright">Services & Classes</span>
           </h2>
           <p className="text-slate-300 text-base font-light">
-            Join Gospel Inn Ministry for fellowship, prayer, discipleship, and encounters.
+            Join Gospel Inn Ministry for fellowship, prayer, discipleship, and encounters. All times are West Africa Time (WAT).
           </p>
         </div>
 
         {/* Reminder Feedback Banner */}
-        {reminderSaved && (
-          <div className="max-w-md mx-auto mb-8 p-3 rounded-xl bg-gim-skyblue/20 border border-gim-skyblue-bright text-center text-xs font-semibold text-white flex items-center justify-center gap-2 animate-in fade-in">
-            <CheckCircle2 className="w-4 h-4 text-gim-skyblue-bright" />
-            Calendar file downloaded for {reminderSaved}! Import it into Google, Apple, or Outlook Calendar.
-          </div>
-        )}
+        <div role="status" aria-live="polite">
+          {reminderSaved && (
+            <div className="max-w-md mx-auto mb-8 p-3 rounded-xl bg-gim-skyblue/20 border border-gim-skyblue-bright text-center text-xs font-semibold text-white flex items-center justify-center gap-2 animate-fade-in">
+              <CheckCircle2 className="w-4 h-4 text-gim-skyblue-bright" />
+              Calendar file downloaded for {reminderSaved}! Import it into Google, Apple, or Outlook Calendar.
+            </div>
+          )}
+        </div>
 
         {/* Filter Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-          {["All", "Weekly", "Monthly"].map((filter) => (
+          {FILTERS.map((filter) => (
             <button
               key={filter}
+              type="button"
               onClick={() => setActiveFilter(filter)}
+              aria-pressed={activeFilter === filter}
               className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
                 activeFilter === filter
                   ? "bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover text-white border border-gim-skyblue-bright/40 shadow-lg shadow-gim-oxblood/30"
                   : "bg-white/5 text-slate-300 hover:text-white border border-white/10 hover:bg-white/10"
               }`}
             >
-              {filter} {filter !== "All" && "Services"}
+              {filter === "All" ? "All" : `${filter} Services`}
             </button>
           ))}
         </div>
@@ -233,7 +104,7 @@ export default function WeeklySchedule() {
         {/* Services Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredServices.map((service) => {
-            const IconComp = service.icon;
+            const IconComp = SERVICE_ICONS[service.id] ?? Calendar;
             const isOxblood = service.color === "oxblood";
 
             return (
@@ -296,6 +167,7 @@ export default function WeeklySchedule() {
                   </div>
 
                   <button
+                    type="button"
                     onClick={() => handleReminder(service)}
                     className="flex items-center gap-1.5 text-xs font-bold text-slate-200 hover:text-gim-skyblue-bright transition-colors"
                   >
@@ -317,7 +189,7 @@ export default function WeeklySchedule() {
             </p>
           </div>
           <a
-            href="https://maps.app.goo.gl/vLX8Gg7AwmP1Gpsj9?g_st=aw"
+            href={SANCTUARY_MAPS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-gim-oxblood to-gim-oxblood-hover border border-gim-skyblue-bright/30 shadow-md shrink-0"

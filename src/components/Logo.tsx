@@ -6,6 +6,8 @@ interface LogoProps {
   variant?: "gold" | "white";
   showText?: boolean;
   showTagline?: boolean;
+  /** Preload the emblem — only for the above-the-fold instance (navbar). */
+  priority?: boolean;
 }
 
 export default function Logo({
@@ -14,6 +16,7 @@ export default function Logo({
   variant = "white",
   showText = true,
   showTagline = true,
+  priority = false,
 }: LogoProps) {
   const dimensions = {
     sm: { img: 34, text: "text-base", badge: "text-[10px]", sub: "text-[8px]" },
@@ -46,7 +49,7 @@ export default function Logo({
           width={selectedDim.img}
           height={selectedDim.img}
           className="rounded-full object-cover p-0.5"
-          priority
+          priority={priority}
         />
         {/* Glow ambient overlay */}
         <div

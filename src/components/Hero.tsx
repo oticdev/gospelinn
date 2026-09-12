@@ -3,32 +3,30 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Play, Calendar, Flame, Clock } from "lucide-react";
+import { ENCOUNTER_SERVICE, nextOccurrence } from "@/lib/schedule";
+
+// Countdown is anchored to the sanctuary's timezone (Africa/Lagos), so it is
+// correct for members watching from abroad too.
+const getNextEncounter = () => nextOccurrence(ENCOUNTER_SERVICE).getTime();
+
+const ZERO = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+const pad2 = (n: number) => String(n).padStart(2, "0");
 
 export default function Hero() {
-  const getNextEncounter = () => {
-    const now = new Date();
-    const target = new Date(now);
-    const diff = (4 - now.getDay() + 7) % 7;
-    target.setDate(now.getDate() + diff);
-    target.setHours(16, 0, 0, 0);
-    return target.getTime() <= now.getTime()
-      ? target.getTime() + 7 * 86400000
-      : target.getTime();
-  };
-
   const [target, setTarget] = useState(getNextEncounter);
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState(ZERO);
 
   useEffect(() => {
     const tick = () => {
       const remaining = Math.max(0, target - Date.now());
       if (remaining === 0) {
         setTarget(getNextEncounter());
-        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+        setTimeLeft(ZERO);
         return;
       }
       setTimeLeft({
-        hours: Math.floor(remaining / 3.6e6),
+        days: Math.floor(remaining / 8.64e7),
+        hours: Math.floor((remaining % 8.64e7) / 3.6e6),
         minutes: Math.floor((remaining % 3.6e6) / 6e4),
         seconds: Math.floor((remaining % 6e4) / 1e3),
       });
@@ -100,24 +98,36 @@ export default function Hero() {
                   </div>
                   <div>
                     <div className="text-xs text-slate-400 font-medium">UPCOMING MEETING</div>
-                    <div className="text-sm font-bold text-white">Encounter Service • Thursday 4:00 PM</div>
+                    <div className="text-sm font-bold text-white">Encounter Service • Thursday 4:00 PM WAT</div>
                   </div>
                 </div>
 
                 {/* Countdown display */}
-                <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-xl border border-white/5 text-center">
+                <div
+                  className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-xl border border-white/5 text-center"
+                  aria-label="Time until the next Encounter Service"
+                >
+                  {timeLeft.days > 0 && (
+                    <>
+                      <div>
+                        <span className="text-sm font-bold text-white">{timeLeft.days}</span>
+                        <span className="text-[10px] text-slate-400 block -mt-1">{timeLeft.days === 1 ? "day" : "days"}</span>
+                      </div>
+                      <span className="text-slate-500 font-bold" aria-hidden="true">:</span>
+                    </>
+                  )}
                   <div>
-                    <span className="text-sm font-bold text-gim-skyblue-bright">{String(timeLeft.hours).padStart(2, "0")}</span>
+                    <span className="text-sm font-bold text-gim-skyblue-bright">{pad2(timeLeft.hours)}</span>
                     <span className="text-[10px] text-slate-400 block -mt-1">hrs</span>
                   </div>
-                  <span className="text-slate-500 font-bold">:</span>
+                  <span className="text-slate-500 font-bold" aria-hidden="true">:</span>
                   <div>
-                    <span className="text-sm font-bold text-white">{String(timeLeft.minutes).padStart(2, "0")}</span>
+                    <span className="text-sm font-bold text-white">{pad2(timeLeft.minutes)}</span>
                     <span className="text-[10px] text-slate-400 block -mt-1">min</span>
                   </div>
-                  <span className="text-slate-500 font-bold">:</span>
+                  <span className="text-slate-500 font-bold" aria-hidden="true">:</span>
                   <div>
-                    <span className="text-sm font-bold text-gim-skyblue-bright">{String(timeLeft.seconds).padStart(2, "0")}</span>
+                    <span className="text-sm font-bold text-gim-skyblue-bright">{pad2(timeLeft.seconds)}</span>
                     <span className="text-[10px] text-slate-400 block -mt-1">sec</span>
                   </div>
                 </div>
@@ -127,7 +137,7 @@ export default function Hero() {
             {/* Quick Metrics */}
             <div className="grid grid-cols-3 gap-4 pt-4 max-w-lg mx-auto lg:mx-0 border-t border-white/10">
               <div>
-                <div className="text-xl sm:text-2xl font-black text-white">4 Weekly</div>
+                <div className="text-xl sm:text-2xl font-black text-white">3 Weekly</div>
                 <div className="text-xs text-slate-400">Services & Classes</div>
               </div>
               <div>
@@ -151,7 +161,7 @@ export default function Hero() {
               <div className="relative rounded-3xl overflow-hidden glass-panel border border-white/15 shadow-2xl">
                 <div className="relative h-[420px] w-full">
                   <Image
-                    src="/images/hero-worship.png"
+                    src="/images/hero-worship.jpg"
                     alt="Gospel Inn Ministry Worship Service"
                     fill
                     sizes="(max-width: 1024px) 100vw, 42vw"

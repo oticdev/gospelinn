@@ -1,9 +1,8 @@
-"use client";
-
 import React from "react";
 import Logo from "./Logo";
 import SocialLinks from "./SocialLinks";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { OFFICE_EMAIL, OFFICE_PHONE_DISPLAY, OFFICE_PHONE_TEL, SANCTUARY_MAPS_URL } from "@/lib/contact";
 
 export default function Footer() {
   return (
@@ -29,8 +28,8 @@ export default function Footer() {
 
           {/* Column 2: Weekly Schedule Overview */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-gim-skyblue-bright">
-              Weekly Services
+            <h4 className="text-sm font-bold uppercase tracking-wider text-gim-skyblue-bright">
+              Services &amp; Classes
             </h4>
             <ul className="space-y-2 text-xs text-slate-300 font-light">
               <li className="flex justify-between py-1 border-b border-white/5">
@@ -54,7 +53,7 @@ export default function Footer() {
 
           {/* Column 3: Quick Links */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-gim-skyblue-bright">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-gim-skyblue-bright">
               Conferences
             </h4>
             <ul className="space-y-2 text-xs text-slate-300">
@@ -69,21 +68,28 @@ export default function Footer() {
 
           {/* Column 4: Contact Info */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider text-gim-skyblue-bright">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-gim-skyblue-bright">
               Sanctuary Contact
             </h4>
             <div className="space-y-2.5 text-xs text-slate-300">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-gim-oxblood shrink-0 mt-0.5" />
-                <span>Gospel Inn Ministry, Main Sanctuary</span>
+                <a
+                  href={SANCTUARY_MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Gospel Inn Ministry, Main Sanctuary
+                </a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-gim-skyblue-bright shrink-0" />
-                <a href="tel:09127462401" className="hover:text-white transition-colors">0912 746 2401</a>
+                <a href={OFFICE_PHONE_TEL} className="hover:text-white transition-colors">{OFFICE_PHONE_DISPLAY}</a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-gim-skyblue-bright shrink-0" />
-                <span>office@gospelinnministries.com</span>
+                <a href={`mailto:${OFFICE_EMAIL}`} className="hover:text-white transition-colors">{OFFICE_EMAIL}</a>
               </div>
             </div>
           </div>
@@ -96,8 +102,6 @@ export default function Footer() {
             © {new Date().getFullYear()} Gospel Inn Ministry. Lead Pastor Ameh Amana. All Rights Reserved.
           </div>
           <div className="flex items-center space-x-6">
-            <a href="#" className="hover:text-slate-300">Privacy Policy</a>
-            <a href="#" className="hover:text-slate-300">Terms of Service</a>
             <a href="#hero" className="text-gim-skyblue-bright hover:underline font-semibold">Back to Top ↑</a>
           </div>
         </div>

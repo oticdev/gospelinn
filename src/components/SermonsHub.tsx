@@ -1,19 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { Play, Mic, Video, Search, X, Clock, Loader2 } from "lucide-react";
+import { Play, Mic, Video, Search, Clock } from "lucide-react";
 import YouTubePlayer from "./YouTubePlayer";
-
-interface YoutubeVideo {
-  id: string;
-  title: string;
-  description: string;
-  publishedAt: string;
-  thumbnail: string;
-  duration: string;
-  viewCount: string;
-}
+import Modal from "./Modal";
+import type { SermonVideo } from "@/lib/youtube";
 
 function parseDuration(iso: string): string {
   const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
@@ -34,44 +26,21 @@ function formatViews(count: string): string {
   return `${n} views`;
 }
 
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+interface SermonsHubProps {
+  /** Latest uploads, fetched server-side in app/page.tsx. */
+  videos: SermonVideo[];
 }
 
-export default function SermonsHub() {
-  const [videos, setVideos] = useState<YoutubeVideo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default function SermonsHub({ videos }: SermonsHubProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeMediaModal, setActiveMediaModal] = useState<YoutubeVideo | null>(null);
+  const [activeMediaModal, setActiveMediaModal] = useState<SermonVideo | null>(null);
 
-  useEffect(() => {
-    fetch("/api/youtube?max=9")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          setError(data.error);
-        } else {
-          setVideos(data.videos || []);
-        }
-      })
-      .catch(() => setError("Failed to load sermons"))
-      .finally(() => setLoading(false));
-  }, []);
-
-  useEffect(() => {
-    if (!activeMediaModal) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveMediaModal(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [activeMediaModal]);
-
-  const filteredVideos = videos.filter((v) =>
-    v.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const query = searchQuery.trim().toLowerCase();
+  const filteredVideos = query
+    ? videos.filter(
+        (v) => v.title.toLowerCase().includes(query) || v.description.toLowerCase().includes(query)
+      )
+    : videos;
 
   return (
     <section id="sermons" className="py-24 bg-slate-900 relative overflow-hidden">
@@ -100,7 +69,8 @@ export default function SermonsHub() {
           <div className="relative w-full">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
-              type="text"
+              type="search"
+              aria-label="Search sermons"
               placeholder="Search sermons or topics..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -109,31 +79,30 @@ export default function SermonsHub() {
           </div>
         </div>
 
-        {/* Loading State */}
-        {loading && (
-          <div className="flex flex-col items-center justify-center py-20 gap-3">
-            <Loader2 className="w-8 h-8 text-gim-skyblue-bright animate-spin" />
-            <span className="text-sm text-slate-400">Loading latest sermons...</span>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && !loading && (
-          <div className="text-center py-20 space-y-2">
-            <p className="text-sm text-red-400 font-semibold">{error}</p>
-            <p className="text-xs text-slate-500">Please check the YouTube API configuration.</p>
-          </div>
-        )}
-
         {/* Empty State */}
-        {!loading && !error && filteredVideos.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-sm text-slate-400">No sermons found{searchQuery ? ` matching "${searchQuery}"` : ""}.</p>
+        {filteredVideos.length === 0 && (
+          <div className="text-center py-20 space-y-2">
+            <p className="text-sm text-slate-400">
+              {videos.length === 0
+                ? "Sermons are temporarily unavailable. Watch the latest messages on our YouTube channel."
+                : `No sermons found matching "${searchQuery}".`}
+            </p>
+            {videos.length === 0 && (
+              <a
+                href="https://www.youtube.com/@gospelinnministries"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-bold text-gim-skyblue-bright hover:underline"
+              >
+                <Play className="w-3.5 h-3.5" />
+                Open YouTube channel
+              </a>
+            )}
           </div>
         )}
 
         {/* Sermons Grid */}
-        {!loading && !error && filteredVideos.length > 0 && (
+        {filteredVideos.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredVideos.map((video) => (
               <div
@@ -142,17 +111,21 @@ export default function SermonsHub() {
               >
                 {/* Video Thumbnail */}
                 <div className="relative h-48 w-full bg-gim-dark overflow-hidden">
-                  <Image
-                    src={video.thumbnail}
-                    alt={video.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  {video.thumbnail && (
+                    <Image
+                      src={video.thumbnail}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-gim-dark via-transparent to-transparent"></div>
                   
                   <button
+                    type="button"
                     onClick={() => setActiveMediaModal(video)}
+                    aria-label={`Play: ${video.title}`}
                     className="absolute inset-0 flex items-center justify-center"
                   >
                     <div className="w-14 h-14 rounded-full bg-gim-oxblood/90 border-2 border-gim-skyblue-bright flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform">
@@ -173,8 +146,8 @@ export default function SermonsHub() {
                 <div className="p-5 space-y-3 flex-1">
                   <div className="flex items-center gap-2 text-[11px] text-slate-400">
                     <span>Pastor Ameh Amana</span>
-                    <span>•</span>
-                    <span>{formatDate(video.publishedAt)}</span>
+                    <span aria-hidden="true">•</span>
+                    <span>{video.publishedLabel}</span>
                   </div>
 
                   <h3 className="text-base font-bold text-white group-hover:text-gim-skyblue-bright transition-colors leading-snug line-clamp-2">
@@ -191,9 +164,11 @@ export default function SermonsHub() {
                   <span className="text-[11px] text-slate-400">{formatViews(video.viewCount)}</span>
 
                   <button
+                    type="button"
                     onClick={() => setActiveMediaModal(video)}
                     className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gim-skyblue-bright"
                     title="Watch Video"
+                    aria-label={`Watch: ${video.title}`}
                   >
                     <Video className="w-4 h-4" />
                   </button>
@@ -207,43 +182,29 @@ export default function SermonsHub() {
 
       {/* Video Player Modal */}
       {activeMediaModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-in fade-in"
-          onClick={() => setActiveMediaModal(null)}
+        <Modal
+          onClose={() => setActiveMediaModal(null)}
+          labelledBy="sermon-player-title"
+          className="max-w-3xl space-y-4"
         >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label={`${activeMediaModal.title} — Video Player`}
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-3xl rounded-3xl glass-panel p-6 border border-white/20 shadow-2xl space-y-4"
-          >
-            <button
-              onClick={() => setActiveMediaModal(null)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full bg-white/10"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="space-y-1 text-left">
-              <span className="text-xs font-bold text-gim-skyblue-bright uppercase">Sermon Message</span>
-              <h3 className="text-xl font-bold text-white">{activeMediaModal.title}</h3>
-              <p className="text-xs text-slate-400">
-                Pastor Ameh Amana • {formatDate(activeMediaModal.publishedAt)}
-              </p>
-            </div>
-
-            {/* YouTube Player */}
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/10">
-              <YouTubePlayer
-                videoId={activeMediaModal.id}
-                onStateChange={(state) => {
-                  if (state === 0) setActiveMediaModal(null);
-                }}
-              />
-            </div>
+          <div className="space-y-1 text-left">
+            <span className="text-xs font-bold text-gim-skyblue-bright uppercase">Sermon Message</span>
+            <h3 id="sermon-player-title" className="text-xl font-bold text-white pr-10">{activeMediaModal.title}</h3>
+            <p className="text-xs text-slate-400">
+              Pastor Ameh Amana • {activeMediaModal.publishedLabel}
+            </p>
           </div>
-        </div>
+
+          {/* YouTube Player */}
+          <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-white/10">
+            <YouTubePlayer
+              videoId={activeMediaModal.id}
+              onStateChange={(state) => {
+                if (state === 0) setActiveMediaModal(null);
+              }}
+            />
+          </div>
+        </Modal>
       )}
     </section>
   );
