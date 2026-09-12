@@ -2,15 +2,23 @@
 
 import React, { useState, useEffect } from "react";
 import Logo from "./Logo";
+import GivingModal from "./GivingModal";
 import { Menu, X, Heart } from "lucide-react";
 
-interface NavbarProps {
-  onOpenGiving: () => void;
-}
+const navLinks = [
+  { name: "Home", href: "#hero" },
+  { name: "Pastor Ameh Amana", href: "#pastor" },
+  { name: "Weekly Meetings", href: "#schedule" },
+  { name: "Conferences", href: "#conferences" },
+  { name: "Encounter Service", href: "#encounter" },
+  { name: "Sermons & Media", href: "#sermons" },
+];
 
-export default function Navbar({ onOpenGiving }: NavbarProps) {
+export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [givingOpen, setGivingOpen] = useState(false);
+  const onOpenGiving = () => setGivingOpen(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,15 +27,6 @@ export default function Navbar({ onOpenGiving }: NavbarProps) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const navLinks = [
-    { name: "Home", href: "#hero" },
-    { name: "Pastor Ameh Amana", href: "#pastor" },
-    { name: "Weekly Meetings", href: "#schedule" },
-    { name: "Conferences", href: "#conferences" },
-    { name: "Encounter Service", href: "#encounter" },
-    { name: "Sermons & Media", href: "#sermons" },
-  ];
 
   return (
     <header
@@ -39,8 +38,8 @@ export default function Navbar({ onOpenGiving }: NavbarProps) {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
-        <a href="#hero">
-          <Logo size="md" />
+        <a href="#hero" aria-label="Gospel Inn Ministry — back to top">
+          <Logo size="md" priority />
         </a>
 
         {/* Desktop Navigation Links */}
@@ -72,6 +71,8 @@ export default function Navbar({ onOpenGiving }: NavbarProps) {
         {/* Mobile menu trigger */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
           className="lg:hidden p-2 text-slate-300 hover:text-white rounded-lg hover:bg-white/10"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -80,7 +81,7 @@ export default function Navbar({ onOpenGiving }: NavbarProps) {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-gim-dark/95 backdrop-blur-2xl border-b border-white/10 px-4 pt-4 pb-6 space-y-3 animate-in fade-in slide-in-from-top-4">
+        <div className="lg:hidden bg-gim-dark/95 backdrop-blur-2xl border-b border-white/10 px-4 pt-4 pb-6 space-y-3 animate-fade-in">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -104,6 +105,8 @@ export default function Navbar({ onOpenGiving }: NavbarProps) {
           </div>
         </div>
       )}
+
+      {givingOpen && <GivingModal onClose={() => setGivingOpen(false)} />}
     </header>
   );
 }

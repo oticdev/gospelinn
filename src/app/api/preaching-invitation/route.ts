@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { guardPublicPost } from "@/lib/request-guards";
 
 const FIELD_LIMITS: Record<string, number> = {
   name: 200,
@@ -14,8 +15,28 @@ const FIELD_LIMITS: Record<string, number> = {
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Only accept flyer links that point at our own Cloudinary account. */
+function isTrustedFlyerUrl(url: string): boolean {
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  if (!cloudName) return false;
+  try {
+    const parsed = new URL(url);
+    return (
+      parsed.protocol === "https:" &&
+      parsed.hostname === "res.cloudinary.com" &&
+      parsed.pathname.startsWith(`/${cloudName}/`)
+    );
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: Request) {
+  const rejected = guardPublicPost(request, "preaching-invitation", { limit: 5, windowMs: 10 * 60 * 1000 });
+  if (rejected) return rejected;
+
   let body: Record<string, unknown>;
   try {
     body = await request.json();
@@ -61,6 +82,13 @@ export async function POST(request: Request) {
   const flyerUrl = str("flyerUrl");
   const flyerName = str("flyerName");
 
+  if (eventDate && !ISO_DATE_PATTERN.test(eventDate)) {
+    return NextResponse.json({ error: "Please provide a valid event date." }, { status: 400 });
+  }
+  if (flyerUrl && !isTrustedFlyerUrl(flyerUrl)) {
+    return NextResponse.json({ error: "Flyer link is not valid." }, { status: 400 });
+  }
+
   // Duplicate keys kept for Google Apps Script / Sheet header compatibility
   const payload: Record<string, string> = {
     name,
@@ -83,6 +111,7 @@ export async function POST(request: Request) {
     payload.flyerName = flyerName;
   }
 
+  // NEXT_PUBLIC_ fallback kept for existing deployments; prefer the private name.
   const endpoint =
     process.env.PREACHING_FORM_ENDPOINT ||
     process.env.NEXT_PUBLIC_PREACHING_FORM_ENDPOINT;

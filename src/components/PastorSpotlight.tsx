@@ -177,8 +177,10 @@ export default function PastorSpotlight() {
 
         </div>
 
-        {connectOpen && <PastorConnectModal onClose={() => setConnectOpen(false)} />}
       </div>
+
+      {/* Rendered in the top layer by <Modal>, so it is unaffected by the z-10 wrapper above. */}
+      {connectOpen && <PastorConnectModal onClose={() => setConnectOpen(false)} />}
     </section>
   );
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import { Sparkles, Flame, Music, Calendar } from "lucide-react";
@@ -20,7 +18,7 @@ export default function EncounterService() {
             
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gim-oxblood/30 border border-gim-oxblood text-xs font-bold text-gim-skyblue-bright uppercase tracking-wider">
               <Calendar className="w-3.5 h-3.5" />
-              Every Thursday @ 4:00 PM
+              Every Thursday @ 4:00 PM WAT
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
@@ -80,7 +78,7 @@ export default function EncounterService() {
               <div className="relative rounded-3xl overflow-hidden glass-panel border border-white/15 shadow-2xl">
                 <div className="relative h-[420px] w-full">
                   <Image
-                    src="/images/encounter-worship.png"
+                    src="/images/encounter-worship.jpg"
                     alt="Thursday Encounter Service Worship"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
